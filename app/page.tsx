@@ -18,6 +18,7 @@ export default async function Home() {
     { count: sociosCount },
     { data: proximoJogoData },
     { data: jogosRecentesData },
+    { data: classificacaoData },
   ] = await Promise.all([
     supabase
       .from('socios')
@@ -35,10 +36,15 @@ export default async function Home() {
       .in('status', ['encerrado', 'ao_vivo'])
       .order('data_jogo', { ascending: false })
       .limit(6),
+    supabase
+      .from('classificacao')
+      .select('*')
+      .order('pos', { ascending: true }),
   ])
 
   const proximoJogo = proximoJogoData?.[0] ?? null
   const jogosRecentes = jogosRecentesData ?? []
+  const classificacao = classificacaoData ?? []
   const totalSocios = sociosCount ?? 0
 
   return (
@@ -47,7 +53,7 @@ export default async function Home() {
       <main>
         <Hero sociosCount={totalSocios} />
         <Beneficios />
-        <Jogos proximoJogo={proximoJogo} jogosRecentes={jogosRecentes} />
+        <Jogos proximoJogo={proximoJogo} jogosRecentes={jogosRecentes} classificacao={classificacao} />
         <Planos />
         <Loja />
         <Parceiros />

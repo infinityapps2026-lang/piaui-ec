@@ -18,9 +18,25 @@ type Jogo = {
   link_ingresso: string | null
 }
 
+type TimeClassificacao = {
+  id: string
+  grupo: string
+  pos: number
+  nome: string
+  pts: number
+  j: number
+  v: number
+  e: number
+  d: number
+  sg: string
+  classified: boolean
+  highlight: boolean
+}
+
 type Props = {
   proximoJogo: Jogo | null
   jogosRecentes: Jogo[]
+  classificacao: TimeClassificacao[]
 }
 
 const PEC_LOGO = '/imagem/logo.png'
@@ -57,7 +73,7 @@ const RESULTADO_STYLE = {
   upcoming:{ label: 'A jogar', card: 'border-l-blue-400', badge: 'bg-blue-400/15 text-blue-400' },
 }
 
-export default function Jogos({ proximoJogo, jogosRecentes }: Props) {
+export default function Jogos({ proximoJogo, jogosRecentes, classificacao }: Props) {
   return (
     <section
       id="jogos"
@@ -106,8 +122,7 @@ export default function Jogos({ proximoJogo, jogosRecentes }: Props) {
           </div>
         )}
 
-        {/* Tabela estática (classificação não está no banco) */}
-        <TabelaClassificacao />
+        <TabelaClassificacao times={classificacao} />
       </div>
 
       {/* Lista de jogos */}
@@ -236,14 +251,19 @@ function ProximoJogo({ jogo }: { jogo: Jogo }) {
   )
 }
 
-function TabelaClassificacao() {
-  const times = [
-    { pos: 1, nome: 'Botafogo-PB', pts: 8,  j: 4, v: 2, e: 2, d: 0, sg: '+3', classified: true },
-    { pos: 2, nome: 'Juazeirense',  pts: 7,  j: 4, v: 2, e: 1, d: 1, sg: '+2', classified: true },
-    { pos: 3, nome: 'Confiança',   pts: 5,  j: 4, v: 1, e: 2, d: 1, sg: '+1' },
-    { pos: 4, nome: 'Piauí EC',    pts: 3,  j: 4, v: 1, e: 0, d: 3, sg: '-3', highlight: true },
-    { pos: 5, nome: 'CRB',         pts: 1,  j: 4, v: 0, e: 1, d: 3, sg: '-3' },
-  ]
+function TabelaClassificacao({ times }: { times: TimeClassificacao[] }) {
+  const grupo = times[0]?.grupo ?? 'B'
+
+  if (times.length === 0) {
+    return (
+      <div
+        className="border border-white/[.08] p-8 flex items-center justify-center"
+        style={{ background: 'rgba(10,31,79,.4)' }}
+      >
+        <p className="text-pec-cinza text-center text-sm">Classificação não disponível.</p>
+      </div>
+    )
+  }
 
   return (
     <div
@@ -253,7 +273,7 @@ function TabelaClassificacao() {
       <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/[.08]">
         <span className="font-archivo font-black text-[14px] tracking-[.15em] uppercase text-white">Classificação</span>
         <span className="text-[10px] tracking-[.2em] text-pec-amarelo uppercase font-bold px-3 py-1.5 border border-pec-amarelo/40">
-          Grupo B
+          Grupo {grupo}
         </span>
       </div>
       <table className="w-full border-collapse">
