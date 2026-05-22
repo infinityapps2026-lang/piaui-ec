@@ -80,7 +80,7 @@ export function Shield({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const px = size === 'sm' ? 40 : size === 'lg' ? 80 : 56
   return (
     <Image
-      src="https://wdgbvzdzctzjcfyuawiu.supabase.co/storage/v1/object/public/team-logos/pec-shield.png"
+      src="/imagem/logo.png"
       alt="Escudo Piauí EC"
       width={px}
       height={px}

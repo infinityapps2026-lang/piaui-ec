@@ -23,7 +23,7 @@ type Props = {
   jogosRecentes: Jogo[]
 }
 
-const PEC_LOGO = 'https://wdgbvzdzctzjcfyuawiu.supabase.co/storage/v1/object/public/team-logos/pec-shield.png'
+const PEC_LOGO = '/imagem/logo.png'
 
 function TeamShield({ url, nome, fallbackColor = '#334155' }: { url: string | null; nome: string; fallbackColor?: string }) {
   const src = url ?? (nome === 'Piauí EC' ? PEC_LOGO : null)
