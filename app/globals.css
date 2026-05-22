@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* ── PEC Theme ─────────────────────────────────────────────── */
+@theme {
+  --color-pec-azul:         #0a1f4f;
+  --color-pec-azul-deep:    #050f2c;
+  --color-pec-azul-light:   #1a3a8f;
+  --color-pec-vermelho:     #e30613;
+  --color-pec-vermelho-deep:#a8000a;
+  --color-pec-cinza:        #9aa3b8;
+  --color-pec-preto:        #02060f;
+  --color-pec-amarelo:      #ffd400;
+
+  --font-bebas:   var(--font-bebas-neue);
+  --font-archivo: var(--font-archivo);
+}
+
+/* ── Globals ───────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+::selection { background: #e30613; color: #fff; }
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseSlow {
+  0%, 100% { opacity: .6; transform: scale(1); }
+  50%       { opacity: .9; transform: scale(1.08); }
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .3; }
+}
+
+/* ── Utility classes (not coverable by Tailwind alone) ──────── */
+.animate-slide-in   { animation: slideIn .8s ease backwards; }
+.animate-pulse-slow { animation: pulseSlow 4s ease-in-out infinite; }
+.animate-ring       { animation: rotateSlow 30s linear infinite; }
+.animate-blink      { animation: blink 1.4s ease-in-out infinite; }
+
+/* ── Admin reset (keep light) ──────────────────────────────── */
+/* admin pages apply their own bg-slate-50 — no conflict */

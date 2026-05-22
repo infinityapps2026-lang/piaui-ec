@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Piauí Esporte Clube — Sócio Torcedor Vibrante</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --azul:#0a1f4f;
+    --azul-deep:#050f2c;
+    --azul-light:#1a3a8f;
+    --vermelho:#e30613;
+    --vermelho-deep:#a8000a;
+    --branco:#ffffff;
+    --cinza:#9aa3b8;
+    --preto:#02060f;
+    --amarelo:#ffd400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Archivo',sans-serif;
+    background:var(--preto);
+    color:var(--branco);
+    overflow-x:hidden;
+    line-height:1.5;
+  }
+  ::selection{background:var(--vermelho);color:#fff;}
+
+  /* ============ HEADER ============ */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:18px 48px;
+    display:flex;align-items:center;justify-content:space-between;
+    backdrop-filter:blur(12px);
+    background:rgba(5,15,44,.78);
+    border-bottom:1px solid rgba(255,255,255,.06);
+    transition:padding .3s ease;
+  }
+  .logo{
+    display:flex;align-items:center;gap:12px;
+    font-family:'Archivo Black',sans-serif;
+    font-size:14px;letter-spacing:.08em;
+  }
+  .logo-shield{
+    width:42px;height:48px;
+    background:var(--vermelho);
+    clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:'Archivo Black';font-size:13px;
+    position:relative;
+  }
+  .logo-shield::before{
+    content:'';position:absolute;inset:3px;
+    background:var(--azul);
+    clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  }
+  .logo-shield span{position:relative;z-index:1;}
+  .logo-text{display:flex;flex-direction:column;line-height:1;}
+  .logo-text small{font-size:9px;color:var(--cinza);letter-spacing:.2em;font-weight:400;}
+  nav ul{
+    display:flex;list-style:none;gap:38px;align-items:center;
+  }
+  nav a{
+    color:var(--branco);text-decoration:none;
+    font-size:12px;letter-spacing:.18em;
+    font-weight:600;text-transform:uppercase;
+    position:relative;padding:6px 0;
+    transition:color .25s;
+  }
+  nav a::after{
+    content:'';position:absolute;left:0;bottom:0;
+    width:0;height:2px;background:var(--vermelho);
+    transition:width .3s ease;
+  }
+  nav a:hover{color:var(--vermelho);}
+  nav a:hover::after{width:100%;}
+  .header-cta{display:flex;gap:10px;}
+  .btn{
+    padding:12px 22px;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    font-weight:700;font-family:'Archivo';
+    border:none;cursor:pointer;
+    text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    transition:all .25s;
+  }
+  .btn-ghost{
+    background:transparent;color:var(--branco);
+    border:1.5px solid rgba(255,255,255,.25);
+  }
+  .btn-ghost:hover{border-color:var(--vermelho);color:var(--vermelho);}
+  .btn-primary{
+    background:var(--vermelho);color:#fff;
+    box-shadow:0 8px 24px -8px var(--vermelho);
+  }
+  .btn-primary:hover{
+    background:var(--vermelho-deep);
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px -8px var(--vermelho);
+  }
+  .btn-arrow{font-size:14px;transition:transform .25s;}
+  .btn:hover .btn-arrow{transform:translateX(4px);}
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:100vh;
+    position:relative;
+    display:flex;align-items:center;
+    padding:120px 48px 80px;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 70% 30%, rgba(227,6,19,.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 20% 70%, rgba(26,58,143,.4) 0%, transparent 55%),
+      linear-gradient(180deg, var(--azul-deep) 0%, var(--preto) 100%);
+  }
+  /* textura de grid sutil */
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:80px 80px;
+    pointer-events:none;
+  }
+  /* faixa diagonal vermelha decorativa */
+  .hero::after{
+    content:'';position:absolute;
+    width:140%;height:80px;
+    background:linear-gradient(90deg, transparent 0%, var(--vermelho) 30%, var(--vermelho) 70%, transparent 100%);
+    transform:rotate(-18deg);
+    top:75%;left:-20%;
+    opacity:.08;
+    pointer-events:none;
+  }
+  .hero-grid{
+    position:relative;z-index:2;
+    display:grid;grid-template-columns:1.4fr 1fr;gap:60px;
+    width:100%;max-width:1380px;margin:0 auto;align-items:center;
+  }
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:12px;
+    font-size:11px;letter-spacing:.3em;color:var(--vermelho);
+    font-weight:700;text-transform:uppercase;
+    margin-bottom:28px;
+    animation:slideIn .8s ease .1s backwards;
+  }
+  .hero-eyebrow::before{
+    content:'';width:36px;height:2px;background:var(--vermelho);
+  }
+  .hero h1{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(64px,8vw,128px);
+    line-height:.88;letter-spacing:-.01em;
+    margin-bottom:32px;
+    text-transform:uppercase;
+    animation:slideIn 1s ease .2s backwards;
+  }
+  .hero h1 .accent{
+    color:var(--vermelho);
+    display:inline-block;
+    position:relative;
+  }
+  .hero h1 .stroke{
+    -webkit-text-stroke:2px var(--branco);
+    color:transparent;
+  }
+  .hero p.lead{
+    font-size:18px;color:#c9d2e8;max-width:520px;
+    margin-bottom:40px;line-height:1.6;
+    animation:slideIn 1s ease .4s backwards;
+  }
+  .hero-actions{
+    display:flex;gap:14px;flex-wrap:wrap;margin-bottom:60px;
+    animation:slideIn 1s ease .6s backwards;
+  }
+  .btn-hero{padding:18px 32px;font-size:12px;}
+  .hero-stats{
+    display:flex;gap:48px;
+    padding-top:32px;
+    border-top:1px solid rgba(255,255,255,.1);
+    animation:slideIn 1s ease .8s backwards;
+  }
+  .stat-num{
+    font-family:'Bebas Neue';
+    font-size:48px;line-height:1;
+    color:var(--branco);
+    display:block;
+  }
+  .stat-num .plus{color:var(--vermelho);}
+  .stat-label{
+    font-size:11px;color:var(--cinza);
+    letter-spacing:.18em;text-transform:uppercase;
+    margin-top:4px;display:block;
+  }
+
+  /* card lateral do hero (escudo + competições) */
+  .hero-card{
+    position:relative;
+    animation:slideIn 1.2s ease .5s backwards;
+  }
+  .shield-big{
+    width:100%;max-width:420px;aspect-ratio:1;
+    margin:0 auto;
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .shield-bg{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(circle at center, rgba(227,6,19,.25) 0%, transparent 65%);
+    filter:blur(30px);
+    animation:pulse 4s ease-in-out infinite;
+  }
+  .shield-svg{
+    position:relative;z-index:2;width:80%;
+    filter:drop-shadow(0 30px 60px rgba(0,0,0,.5));
+  }
+  /* anel rotativo de competições */
+  .ring{
+    position:absolute;inset:-30px;
+    border:1.5px dashed rgba(255,212,0,.4);
+    border-radius:50%;
+    animation:rotate 30s linear infinite;
+  }
+  .ring-2{
+    position:absolute;inset:-60px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:50%;
+  }
+  .competition-badges{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    pointer-events:none;
+  }
+  .badge{
+    position:absolute;
+    background:rgba(5,15,44,.92);
+    border:1px solid rgba(255,212,0,.35);
+    color:var(--amarelo);
+    padding:8px 14px;
+    font-size:10px;letter-spacing:.15em;font-weight:700;
+    text-transform:uppercase;
+    backdrop-filter:blur(8px);
+    box-shadow:0 8px 24px rgba(0,0,0,.4);
+  }
+  .badge-1{top:-5%;left:50%;transform:translateX(-50%);}
+  .badge-2{top:50%;right:-15%;transform:translateY(-50%);}
+  .badge-3{bottom:-5%;left:50%;transform:translateX(-50%);}
+  .badge-4{top:50%;left:-15%;transform:translateY(-50%);}
+
+  /* ============ SEÇÃO BENEFÍCIOS ============ */
+  .benefits{
+    padding:140px 48px;
+    background:var(--preto);
+    position:relative;
+  }
+  .section-header{
+    max-width:1380px;margin:0 auto 80px;
+    display:grid;grid-template-columns:auto 1fr;gap:60px;align-items:end;
+  }
+  .section-num{
+    font-family:'Bebas Neue';
+    font-size:120px;line-height:1;
+    color:transparent;
+    -webkit-text-stroke:1.5px rgba(227,6,19,.3);
+  }
+  .section-title-wrap h2{
+    font-family:'Bebas Neue';
+    font-size:clamp(48px,5vw,84px);
+    line-height:.95;letter-spacing:-.005em;
+    text-transform:uppercase;
+  }
+  .section-title-wrap h2 .accent{color:var(--vermelho);}
+  .section-eyebrow{
+    color:var(--vermelho);
+    font-size:11px;letter-spacing:.3em;
+    font-weight:700;text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .benefits-grid{
+    max-width:1380px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    border-top:1px solid rgba(255,255,255,.1);
+    border-left:1px solid rgba(255,255,255,.1);
+  }
+  .benefit{
+    padding:48px 36px;
+    border-right:1px solid rgba(255,255,255,.1);
+    border-bottom:1px solid rgba(255,255,255,.1);
+    transition:background .3s;
+    position:relative;
+    overflow:hidden;
+    cursor:default;
+  }
+  .benefit:hover{background:rgba(227,6,19,.06);}
+  .benefit::before{
+    content:'';position:absolute;
+    top:0;left:0;width:100%;height:3px;
+    background:var(--vermelho);
+    transform:scaleX(0);transform-origin:left;
+    transition:transform .4s ease;
+  }
+  .benefit:hover::before{transform:scaleX(1);}
+  .benefit-num{
+    font-family:'Bebas Neue';
+    color:var(--vermelho);
+    font-size:14px;letter-spacing:.1em;
+    margin-bottom:32px;
+  }
+  .benefit-icon{
+    width:54px;height:54px;
+    margin-bottom:28px;
+    color:var(--vermelho);
+  }
+  .benefit h3{
+    font-family:'Archivo Black';
+    font-size:18px;
+    text-transform:uppercase;letter-spacing:-.005em;
+    margin-bottom:14px;line-height:1.2;
+  }
+  .benefit p{
+    font-size:14px;color:var(--cinza);line-height:1.6;
+  }
+
+  /* ============ PLANOS ============ */
+  .plans{
+    padding:140px 48px;
+    background:linear-gradient(180deg, var(--preto) 0%, var(--azul-deep) 100%);
+    position:relative;
+  }
+  .plans::before{
+    content:'';position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size:60px 60px;
+    pointer-events:none;
+  }
+  .plans-tabs{
+    max-width:1380px;margin:0 auto 60px;
+    display:flex;justify-content:center;gap:0;
+    border-bottom:1px solid rgba(255,255,255,.1);
+  }
+  .tab{
+    padding:18px 40px;
+    background:transparent;border:none;
+    color:var(--cinza);
+    font-family:'Archivo';font-weight:700;
+    font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    transition:all .25s;
+  }
+  .tab.active{
+    color:var(--branco);
+    border-bottom-color:var(--vermelho);
+  }
+  .tab:hover:not(.active){color:var(--branco);}
+
+  .plans-grid{
+    max-width:1380px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+    position:relative;z-index:2;
+  }
+  .plan{
+    background:rgba(10,31,79,.4);
+    backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.08);
+    padding:42px 32px;
+    position:relative;
+    transition:all .3s;
+  }
+  .plan:hover{
+    border-color:rgba(255,255,255,.18);
+    transform:translateY(-6px);
+  }
+  .plan.featured{
+    background:linear-gradient(160deg, rgba(227,6,19,.18) 0%, rgba(10,31,79,.6) 60%);
+    border:1px solid var(--vermelho);
+    transform:scale(1.04);
+    box-shadow:0 30px 60px -20px rgba(227,6,19,.4);
+  }
+  .plan.featured:hover{
+    transform:scale(1.04) translateY(-6px);
+  }
+  .plan-badge{
+    position:absolute;top:-13px;left:50%;
+    transform:translateX(-50%);
+    background:var(--vermelho);
+    color:#fff;
+    padding:7px 18px;
+    font-size:10px;letter-spacing:.2em;
+    font-weight:700;text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .plan-name{
+    font-family:'Archivo Black';
+    font-size:13px;letter-spacing:.2em;
+    color:var(--cinza);text-transform:uppercase;
+    margin-bottom:24px;
+  }
+  .plan.featured .plan-name{color:var(--vermelho);}
+  .plan-price{
+    display:flex;align-items:baseline;gap:8px;
+    margin-bottom:8px;
+  }
+  .plan-price .currency{
+    font-family:'Archivo';font-size:20px;font-weight:600;
+    color:var(--cinza);
+  }
+  .plan-price .amount{
+    font-family:'Bebas Neue';
+    font-size:88px;line-height:.9;
+    color:var(--branco);
+  }
+  .plan.featured .plan-price .amount{color:var(--branco);}
+  .plan-price .period{
+    font-size:14px;color:var(--cinza);
+  }
+  .plan-tagline{
+    font-size:13px;color:var(--cinza);
+    margin-bottom:32px;
+    padding-bottom:32px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .plan-features{
+    list-style:none;margin-bottom:36px;
+  }
+  .plan-features li{
+    padding:11px 0;
+    font-size:14px;color:#d4dcef;
+    display:flex;align-items:center;gap:12px;
+  }
+  .plan-features svg{
+    flex-shrink:0;width:18px;height:18px;color:var(--vermelho);
+  }
+  .plan .btn{
+    width:100%;justify-content:center;padding:16px;
+  }
+  .plan-empresa-link{
+    text-align:center;margin-top:48px;
+  }
+  .plan-empresa-link a{
+    color:var(--cinza);font-size:13px;
+    text-decoration:none;letter-spacing:.05em;
+    border-bottom:1px solid rgba(255,255,255,.2);
+    padding-bottom:2px;
+    transition:all .25s;
+  }
+  .plan-empresa-link a:hover{
+    color:var(--vermelho);border-color:var(--vermelho);
+  }
+
+  /* ============ LOJA ============ */
+  .shop{
+    padding:140px 48px;
+    background:var(--preto);
+  }
+  .shop-grid{
+    max-width:1380px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
+  }
+  .product{
+    background:#0c1530;
+    border:1px solid rgba(255,255,255,.06);
+    overflow:hidden;
+    transition:all .3s;
+    position:relative;
+    cursor:pointer;
+  }
+  .product:hover{
+    transform:translateY(-6px);
+    border-color:var(--vermelho);
+  }
+  .product-image{
+    aspect-ratio:1;
+    background:linear-gradient(135deg, var(--azul-light) 0%, var(--azul-deep) 100%);
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .product-image::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.1) 0%, transparent 50%);
+  }
+  .product-tag{
+    position:absolute;top:14px;left:14px;
+    background:var(--vermelho);color:#fff;
+    padding:5px 11px;font-size:10px;
+    letter-spacing:.15em;font-weight:700;
+    text-transform:uppercase;
+    z-index:2;
+  }
+  .product-info{
+    padding:22px 20px;
+  }
+  .product-cat{
+    font-size:10px;color:var(--cinza);
+    letter-spacing:.2em;text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .product-name{
+    font-family:'Archivo';font-weight:700;
+    font-size:16px;margin-bottom:14px;line-height:1.3;
+  }
+  .product-price{
+    font-family:'Bebas Neue';
+    font-size:28px;color:var(--vermelho);line-height:1;
+  }
+  /* ilustrações simples nos produtos */
+  .jersey-svg{width:60%;height:60%;}
+
+  /* ============ PARCEIROS ============ */
+  .partners{
+    padding:120px 48px;
+    background:#06102b;
+    border-top:1px solid rgba(255,255,255,.05);
+    border-bottom:1px solid rgba(255,255,255,.05);
+  }
+  .partners-grid{
+    max-width:1380px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(6,1fr);gap:0;
+    border-top:1px solid rgba(255,255,255,.08);
+    border-left:1px solid rgba(255,255,255,.08);
+  }
+  .partner{
+    aspect-ratio:1.6;
+    border-right:1px solid rgba(255,255,255,.08);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--cinza);
+    font-family:'Archivo Black';
+    font-size:14px;letter-spacing:.05em;
+    transition:all .3s;
+    text-transform:uppercase;
+    filter:grayscale(1);opacity:.5;
+  }
+  .partner:hover{
+    color:var(--branco);
+    background:rgba(227,6,19,.08);
+    filter:grayscale(0);opacity:1;
+  }
+
+  /* ============ CTA FINAL ============ */
+  .final-cta{
+    padding:140px 48px;
+    background:
+      radial-gradient(ellipse at center, rgba(227,6,19,.2) 0%, transparent 60%),
+      var(--azul-deep);
+    text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .final-cta::before{
+    content:'PIAUIZÃO';
+    position:absolute;
+    font-family:'Bebas Neue';
+    font-size:clamp(160px,22vw,360px);
+    color:rgba(227,6,19,.04);
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    white-space:nowrap;letter-spacing:-.02em;
+    pointer-events:none;
+    line-height:1;
+  }
+  .final-cta-content{position:relative;z-index:2;max-width:900px;margin:0 auto;}
+  .final-cta h2{
+    font-family:'Bebas Neue';
+    font-size:clamp(56px,7vw,108px);
+    line-height:.95;
+    text-transform:uppercase;
+    margin-bottom:24px;
+  }
+  .final-cta h2 .stroke{-webkit-text-stroke:2px #fff;color:transparent;}
+  .final-cta p{
+    font-size:18px;color:#c9d2e8;
+    margin-bottom:40px;
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    background:var(--preto);
+    padding:80px 48px 40px;
+    border-top:1px solid rgba(255,255,255,.06);
+  }
+  .footer-grid{
+    max-width:1380px;margin:0 auto;
+    display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;
+    margin-bottom:60px;
+  }
+  .footer-brand p{
+    color:var(--cinza);font-size:14px;
+    line-height:1.7;margin-top:20px;max-width:340px;
+  }
+  .footer-col h4{
+    font-family:'Archivo Black';
+    font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;
+    margin-bottom:22px;color:var(--branco);
+  }
+  .footer-col ul{list-style:none;}
+  .footer-col li{margin-bottom:12px;}
+  .footer-col a{
+    color:var(--cinza);text-decoration:none;
+    font-size:14px;
+    transition:color .25s;
+  }
+  .footer-col a:hover{color:var(--vermelho);}
+  .footer-bottom{
+    max-width:1380px;margin:0 auto;
+    padding-top:32px;
+    border-top:1px solid rgba(255,255,255,.06);
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:20px;
+    color:var(--cinza);font-size:12px;
+    letter-spacing:.05em;
+  }
+  .socials{display:flex;gap:14px;}
+  .socials a{
+    width:38px;height:38px;
+    border:1px solid rgba(255,255,255,.15);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--cinza);text-decoration:none;
+    transition:all .25s;
+  }
+  .socials a:hover{
+    border-color:var(--vermelho);color:var(--vermelho);
+  }
+
+  /* ============ JOGOS E TABELA ============ */
+  .matches{
+    padding:140px 48px;
+    background:
+      linear-gradient(180deg, var(--azul-deep) 0%, var(--preto) 100%);
+    position:relative;
+    overflow:hidden;
+  }
+  .matches::before{
+    content:'';position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size:60px 60px;
+    pointer-events:none;
+  }
+  .matches-tabs{
+    max-width:1380px;margin:0 auto 50px;
+    display:flex;gap:0;justify-content:center;
+    border-bottom:1px solid rgba(255,255,255,.1);
+    position:relative;z-index:2;
+  }
+  .matches-content{
+    max-width:1380px;margin:0 auto;
+    position:relative;z-index:2;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:32px;
+  }
+
+  /* card de próximo jogo destacado */
+  .next-match{
+    background:linear-gradient(160deg, rgba(227,6,19,.15) 0%, rgba(10,31,79,.7) 60%);
+    border:1px solid rgba(227,6,19,.4);
+    padding:36px;
+    position:relative;
+    overflow:hidden;
+  }
+  .next-match::before{
+    content:'PRÓXIMO';
+    position:absolute;
+    font-family:'Bebas Neue';
+    font-size:200px;
+    color:rgba(255,255,255,.025);
+    top:-30px;right:-20px;
+    line-height:1;letter-spacing:-.02em;
+    pointer-events:none;
+  }
+  .next-match-tag{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:6px 14px;
+    background:var(--vermelho);
+    color:#fff;
+    font-size:10px;letter-spacing:.25em;
+    font-weight:700;text-transform:uppercase;
+    margin-bottom:24px;
+  }
+  .next-match-tag::before{
+    content:'';width:6px;height:6px;background:#fff;
+    border-radius:50%;
+    animation:blink 1.4s ease-in-out infinite;
+  }
+  .next-match-comp{
+    font-size:11px;letter-spacing:.25em;
+    color:var(--amarelo);
+    text-transform:uppercase;font-weight:700;
+    margin-bottom:8px;
+  }
+  .next-match-round{
+    color:var(--cinza);font-size:12px;
+    margin-bottom:30px;
+  }
+  .versus{
+    display:grid;grid-template-columns:1fr auto 1fr;
+    gap:24px;align-items:center;
+    margin-bottom:32px;
+  }
+  .team{
+    text-align:center;
+  }
+  .team-logo{
+    width:80px;height:90px;margin:0 auto 14px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .team-logo svg{width:100%;height:100%;}
+  .team-name{
+    font-family:'Archivo Black';
+    font-size:15px;letter-spacing:-.005em;
+    text-transform:uppercase;line-height:1.2;
+  }
+  .team-sub{
+    font-size:10px;color:var(--cinza);
+    letter-spacing:.15em;text-transform:uppercase;
+    margin-top:4px;
+  }
+  .vs-divider{
+    font-family:'Bebas Neue';
+    font-size:42px;color:var(--vermelho);
+    line-height:1;
+  }
+  .next-match-info{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    padding-top:24px;
+    border-top:1px solid rgba(255,255,255,.1);
+    margin-bottom:28px;
+  }
+  .info-item{
+    text-align:center;
+  }
+  .info-item-label{
+    font-size:9px;letter-spacing:.2em;
+    color:var(--cinza);text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .info-item-value{
+    font-family:'Archivo';font-weight:700;
+    font-size:13px;color:#fff;
+  }
+  .info-item-value strong{
+    color:var(--vermelho);
+    font-family:'Bebas Neue';
+    font-size:24px;line-height:1;display:block;
+  }
+  .next-match-actions{
+    display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .next-match-actions .btn{flex:1;justify-content:center;font-size:11px;}
+
+  /* tabela do grupo */
+  .standings{
+    background:rgba(10,31,79,.4);
+    border:1px solid rgba(255,255,255,.08);
+    padding:32px;
+  }
+  .standings-header{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:24px;
+    padding-bottom:18px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .standings-title{
+    font-family:'Archivo Black';
+    font-size:14px;letter-spacing:.15em;
+    text-transform:uppercase;
+  }
+  .standings-group{
+    font-size:10px;letter-spacing:.2em;
+    color:var(--amarelo);
+    text-transform:uppercase;font-weight:700;
+    padding:5px 12px;border:1px solid rgba(255,212,0,.4);
+  }
+  .standings-table{
+    width:100%;border-collapse:collapse;
+  }
+  .standings-table th{
+    font-size:10px;letter-spacing:.15em;
+    color:var(--cinza);text-transform:uppercase;
+    font-weight:600;text-align:center;
+    padding:10px 4px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .standings-table th:first-child{text-align:left;padding-left:0;}
+  .standings-table td{
+    padding:14px 4px;
+    border-bottom:1px solid rgba(255,255,255,.04);
+    text-align:center;
+    font-size:13px;
+  }
+  .standings-table td:first-child{
+    text-align:left;padding-left:0;
+    font-family:'Archivo';font-weight:600;
+  }
+  .standings-table .pos{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;
+    font-family:'Bebas Neue';
+    font-size:14px;
+    background:rgba(255,255,255,.06);
+    margin-right:10px;
+    color:var(--cinza);
+  }
+  .standings-table tr.classified .pos{
+    background:rgba(34,197,94,.18);
+    color:#4ade80;
+  }
+  .standings-table tr.highlight{
+    background:rgba(227,6,19,.08);
+  }
+  .standings-table tr.highlight td{
+    color:#fff;
+  }
+  .standings-table tr.highlight .pos{
+    background:var(--vermelho);color:#fff;
+  }
+  .standings-table .pts{
+    font-family:'Bebas Neue';
+    font-size:20px;color:var(--branco);
+  }
+  .standings-table tr.highlight .pts{color:var(--vermelho);}
+  .standings-legend{
+    margin-top:18px;
+    display:flex;gap:18px;
+    font-size:10px;color:var(--cinza);
+    letter-spacing:.05em;
+  }
+  .standings-legend span{display:flex;align-items:center;gap:6px;}
+  .standings-legend span::before{
+    content:'';width:8px;height:8px;border-radius:50%;
+  }
+  .standings-legend .leg-class::before{background:#4ade80;}
+  .standings-legend .leg-pec::before{background:var(--vermelho);}
+
+  /* Lista de jogos passados/próximos */
+  .matches-list-wrap{
+    max-width:1380px;margin:60px auto 0;
+    position:relative;z-index:2;
+  }
+  .matches-list-title{
+    font-family:'Archivo Black';
+    font-size:14px;letter-spacing:.15em;
+    text-transform:uppercase;
+    margin-bottom:24px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .matches-list-title::after{
+    content:'';flex:1;height:1px;
+    background:rgba(255,255,255,.1);
+  }
+  .matches-list{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  }
+  .match-card{
+    background:rgba(10,31,79,.3);
+    border:1px solid rgba(255,255,255,.06);
+    padding:20px 22px;
+    transition:all .3s;
+    position:relative;
+  }
+  .match-card:hover{
+    border-color:rgba(255,255,255,.18);
+    transform:translateY(-3px);
+  }
+  .match-card.win{border-left:3px solid #4ade80;}
+  .match-card.draw{border-left:3px solid var(--amarelo);}
+  .match-card.loss{border-left:3px solid var(--vermelho);}
+  .match-card.upcoming{border-left:3px solid #60a5fa;}
+  .match-card-top{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:16px;
+  }
+  .match-comp{
+    font-size:9px;letter-spacing:.2em;
+    color:var(--cinza);text-transform:uppercase;
+    font-weight:700;
+  }
+  .match-result{
+    font-size:9px;letter-spacing:.2em;
+    font-weight:700;text-transform:uppercase;
+    padding:3px 8px;
+  }
+  .match-result.win{background:rgba(74,222,128,.15);color:#4ade80;}
+  .match-result.draw{background:rgba(255,212,0,.15);color:var(--amarelo);}
+  .match-result.loss{background:rgba(227,6,19,.15);color:var(--vermelho);}
+  .match-result.upcoming{background:rgba(96,165,250,.15);color:#60a5fa;}
+  .match-teams{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:14px;
+  }
+  .match-team{
+    display:flex;align-items:center;gap:10px;
+    font-size:13px;font-weight:600;
+  }
+  .match-team-mini{
+    width:24px;height:28px;flex-shrink:0;
+  }
+  .match-score{
+    font-family:'Bebas Neue';
+    font-size:24px;line-height:1;
+    color:#fff;
+    padding:0 8px;
+  }
+  .match-score.upcoming{
+    font-size:14px;
+    font-family:'Archivo';
+    color:var(--cinza);
+    letter-spacing:.1em;
+  }
+  .match-meta{
+    font-size:11px;color:var(--cinza);
+    display:flex;justify-content:space-between;
+    padding-top:12px;
+    border-top:1px solid rgba(255,255,255,.06);
+  }
+
+  @keyframes blink{
+    0%,100%{opacity:1;}
+    50%{opacity:.3;}
+  }
+
+  @media (max-width:980px){
+    .matches{padding:80px 20px;}
+    .matches-content{grid-template-columns:1fr;}
+    .matches-list{grid-template-columns:1fr;}
+    .next-match-info{grid-template-columns:1fr;gap:18px;}
+    .next-match-actions{flex-direction:column;}
+    .standings{padding:22px;}
+    .standings-table th, .standings-table td{font-size:11px;padding:8px 2px;}
+    .versus{gap:12px;}
+    .team-logo{width:60px;height:68px;}
+    .team-name{font-size:13px;}
+  }
+
+  /* ============ ANIMAÇÕES ============ */
+  @keyframes slideIn{
+    from{opacity:0;transform:translateY(30px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes pulse{
+    0%,100%{opacity:.6;transform:scale(1);}
+    50%{opacity:.9;transform:scale(1.08);}
+  }
+  @keyframes rotate{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+  @keyframes count{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* ============ MOBILE ============ */
+  @media (max-width:980px){
+    header{padding:14px 20px;}
+    nav ul{display:none;}
+    .header-cta .btn-ghost{display:none;}
+    .hero{padding:100px 20px 60px;}
+    .hero-grid{grid-template-columns:1fr;gap:60px;}
+    .hero-card{order:-1;max-width:280px;margin:0 auto;}
+    .hero-stats{gap:24px;flex-wrap:wrap;}
+    .stat-num{font-size:36px;}
+    .benefits, .plans, .shop, .partners, .final-cta{padding:80px 20px;}
+    .section-header{grid-template-columns:1fr;gap:20px;margin-bottom:50px;}
+    .section-num{font-size:80px;}
+    .benefits-grid{grid-template-columns:1fr 1fr;}
+    .plans-grid{grid-template-columns:1fr;}
+    .plan.featured{transform:scale(1);}
+    .plan.featured:hover{transform:translateY(-6px);}
+    .shop-grid{grid-template-columns:1fr 1fr;}
+    .partners-grid{grid-template-columns:1fr 1fr 1fr;}
+    .footer-grid{grid-template-columns:1fr;gap:40px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-shield"><span>PEC</span></div>
+    <div class="logo-text">
+      PIAUÍ ESPORTE CLUBE
+      <small>FUNDADO EM 1948</small>
+    </div>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#jogos">Jogos</a></li>
+      <li><a href="#planos">Seja Sócio</a></li>
+      <li><a href="#loja">Loja</a></li>
+      <li><a href="#">Transparência</a></li>
+      <li><a href="#parceiros">Parceiros</a></li>
+      <li><a href="#">Contato</a></li>
+    </ul>
+  </nav>
+  <div class="header-cta">
+    <a href="#" class="btn btn-ghost">Entrar</a>
+    <a href="#planos" class="btn btn-primary">Associe-se <span class="btn-arrow">→</span></a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow">Programa Sócio Torcedor 2026</div>
+      <h1>
+        Faça parte<br>
+        da <span class="accent">história</span><br>
+        <span class="stroke">vibrante</span>
+      </h1>
+      <p class="lead">
+        Mais que torcer — viva o Piauizão por dentro. Ingressos com desconto, experiências exclusivas e a certeza de fortalecer o clube que carrega o nome do nosso estado.
+      </p>
+      <div class="hero-actions">
+        <a href="#planos" class="btn btn-primary btn-hero">Quero ser sócio <span class="btn-arrow">→</span></a>
+        <a href="#" class="btn btn-ghost btn-hero">Conhecer planos</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <span class="stat-num"><span class="plus">+</span>1.247</span>
+          <span class="stat-label">Sócios ativos</span>
+        </div>
+        <div>
+          <span class="stat-num">78</span>
+          <span class="stat-label">Anos de história</span>
+        </div>
+        <div>
+          <span class="stat-num">04</span>
+          <span class="stat-label">Competições 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="shield-big">
+        <div class="shield-bg"></div>
+        <div class="ring"></div>
+        <div class="ring-2"></div>
+        <!-- Escudo SVG estilizado do PEC -->
+        <svg class="shield-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="shield-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1a3a8f"/>
+              <stop offset="100%" stop-color="#0a1f4f"/>
+            </linearGradient>
+          </defs>
+          <!-- escudo externo vermelho -->
+          <path d="M100 5 L195 35 L195 130 Q195 200 100 235 Q5 200 5 130 L5 35 Z" fill="#e30613" stroke="#fff" stroke-width="2"/>
+          <!-- interno azul -->
+          <path d="M100 22 L178 47 L178 130 Q178 188 100 218 Q22 188 22 130 L22 47 Z" fill="url(#shield-grad)"/>
+          <!-- losango central branco -->
+          <path d="M100 60 L150 120 L100 180 L50 120 Z" fill="#fff"/>
+          <!-- PEC central -->
+          <text x="100" y="130" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="32" font-weight="900" fill="#0a1f4f">PEC</text>
+          <!-- 3 estrelas -->
+          <text x="80" y="100" font-size="14" fill="#e30613">★</text>
+          <text x="98" y="95" font-size="14" fill="#e30613">★</text>
+          <text x="116" y="100" font-size="14" fill="#e30613">★</text>
+        </svg>
+        <div class="competition-badges">
+          <div class="badge badge-1">Estadual</div>
+          <div class="badge badge-2">Copa NE</div>
+          <div class="badge badge-3">Série D</div>
+          <div class="badge badge-4">Copa BR</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFÍCIOS -->
+<section class="benefits">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">Por que ser sócio</div>
+      <h2>Vantagens que <span class="accent">vibram</span><br>com você o ano inteiro</h2>
+    </div>
+  </div>
+  <div class="benefits-grid">
+    <div class="benefit">
+      <div class="benefit-num">/ 01</div>
+      <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M2 9a3 3 0 010 6v2a2 2 0 002 2h16a2 2 0 002-2v-2a3 3 0 010-6V7a2 2 0 00-2-2H4a2 2 0 00-2 2v2zM13 5v2M13 11v2M13 17v2"/>
+      </svg>
+      <h3>Ingressos com desconto</h3>
+      <p>De 20% a 100% off em todos os jogos como mandante. Cadeira garantida nos planos premium.</p>
+    </div>
+    <div class="benefit">
+      <div class="benefit-num">/ 02</div>
+      <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L15 8l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>
+      </svg>
+      <h3>Experiências únicas</h3>
+      <p>Visite o vestiário, conheça jogadores, entre em campo. Momentos que dinheiro nenhum compra na rua.</p>
+    </div>
+    <div class="benefit">
+      <div class="benefit-num">/ 03</div>
+      <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z M3 6h18 M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <h3>Loja com desconto</h3>
+      <p>Camisas, bonés e produtos oficiais com até 30% off exclusivo para sócios adimplentes.</p>
+    </div>
+    <div class="benefit">
+      <div class="benefit-num">/ 04</div>
+      <svg class="benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+      </svg>
+      <h3>Apoio direto ao clube</h3>
+      <p>Sua mensalidade financia categorias de base, infraestrutura e o sonho de ver o PEC voar mais alto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- JOGOS E TABELA -->
+<section class="matches" id="jogos">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">Em campo</div>
+      <h2>Jogos &amp; <span class="accent">tabela</span><br>Copa do Nordeste 2026</h2>
+    </div>
+  </div>
+
+  <div class="matches-content">
+
+    <!-- PRÓXIMO JOGO -->
+    <div class="next-match">
+      <div class="next-match-tag">Próximo jogo</div>
+      <div class="next-match-comp">Copa do Nordeste · Casas Bahia 2026</div>
+      <div class="next-match-round">5ª Rodada · Fase de Grupos</div>
+
+      <div class="versus">
+        <div class="team">
+          <div class="team-logo">
+            <!-- Escudo PEC mini -->
+            <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#e30613" stroke="#fff" stroke-width="1.5"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#0a1f4f"/>
+              <path d="M50 32 L75 62 L50 90 L25 62 Z" fill="#fff"/>
+              <text x="50" y="68" text-anchor="middle" font-family="Archivo Black" font-size="16" fill="#0a1f4f">PEC</text>
+            </svg>
+          </div>
+          <div class="team-name">Piauí EC</div>
+          <div class="team-sub">Mandante</div>
+        </div>
+
+        <div class="vs-divider">×</div>
+
+        <div class="team">
+          <div class="team-logo">
+            <!-- Escudo Itabaiana mini -->
+            <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#16a34a" stroke="#fff" stroke-width="1.5"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#fff"/>
+              <text x="50" y="58" text-anchor="middle" font-family="Archivo Black" font-size="13" fill="#16a34a">AD</text>
+              <text x="50" y="78" text-anchor="middle" font-family="Archivo Black" font-size="11" fill="#16a34a">CONFIANÇA</text>
+            </svg>
+          </div>
+          <div class="team-name">Confiança</div>
+          <div class="team-sub">Visitante · SE</div>
+        </div>
+      </div>
+
+      <div class="next-match-info">
+        <div class="info-item">
+          <div class="info-item-label">Data</div>
+          <div class="info-item-value"><strong>29</strong>ABRIL · QUA</div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-label">Horário</div>
+          <div class="info-item-value"><strong>21:30</strong>HORÁRIO BR</div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-label">Estádio</div>
+          <div class="info-item-value">Lindolfo<br>Monteiro</div>
+        </div>
+      </div>
+
+      <div class="next-match-actions">
+        <a href="#" class="btn btn-primary">Comprar ingresso <span class="btn-arrow">→</span></a>
+        <a href="#" class="btn btn-ghost">Ver detalhes</a>
+      </div>
+    </div>
+
+    <!-- TABELA DO GRUPO -->
+    <div class="standings">
+      <div class="standings-header">
+        <div class="standings-title">Classificação</div>
+        <div class="standings-group">Grupo B</div>
+      </div>
+      <table class="standings-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>P</th>
+            <th>J</th>
+            <th>V</th>
+            <th>E</th>
+            <th>D</th>
+            <th>SG</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="classified">
+            <td><span class="pos">1</span>Botafogo-PB</td>
+            <td class="pts">8</td>
+            <td>4</td>
+            <td>2</td>
+            <td>2</td>
+            <td>0</td>
+            <td>+3</td>
+          </tr>
+          <tr class="classified">
+            <td><span class="pos">2</span>Juazeirense</td>
+            <td class="pts">7</td>
+            <td>4</td>
+            <td>2</td>
+            <td>1</td>
+            <td>1</td>
+            <td>+2</td>
+          </tr>
+          <tr>
+            <td><span class="pos">3</span>Confiança</td>
+            <td class="pts">5</td>
+            <td>4</td>
+            <td>1</td>
+            <td>2</td>
+            <td>1</td>
+            <td>+1</td>
+          </tr>
+          <tr class="highlight">
+            <td><span class="pos">4</span>Piauí EC</td>
+            <td class="pts">3</td>
+            <td>4</td>
+            <td>1</td>
+            <td>0</td>
+            <td>3</td>
+            <td>-3</td>
+          </tr>
+          <tr>
+            <td><span class="pos">5</span>CRB</td>
+            <td class="pts">1</td>
+            <td>4</td>
+            <td>0</td>
+            <td>1</td>
+            <td>3</td>
+            <td>-3</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="standings-legend">
+        <span class="leg-class">Zona de classificação</span>
+        <span class="leg-pec">Piauí EC</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LISTA DE JOGOS RECENTES E PRÓXIMOS -->
+  <div class="matches-list-wrap">
+    <div class="matches-list-title">Últimos resultados &amp; próximas partidas</div>
+    <div class="matches-list">
+
+      <!-- PASSADO 1 -->
+      <div class="match-card win">
+        <div class="match-card-top">
+          <span class="match-comp">Copa do Nordeste · 1ª rod.</span>
+          <span class="match-result win">Vitória</span>
+        </div>
+        <div class="match-teams">
+          <div class="match-team">
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#e30613"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#0a1f4f"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#fff">P</text>
+            </svg>
+            Piauí EC
+          </div>
+          <div class="match-score">1 — 0</div>
+          <div class="match-team" style="justify-content:flex-end;">
+            Sousa
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#0a1f4f"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#fff">S</text>
+            </svg>
+          </div>
+        </div>
+        <div class="match-meta">
+          <span>📍 Lindolfo Monteiro</span>
+          <span>26/03/2026</span>
+        </div>
+      </div>
+
+      <!-- PASSADO 2 -->
+      <div class="match-card loss">
+        <div class="match-card-top">
+          <span class="match-comp">Copa do Nordeste · 2ª rod.</span>
+          <span class="match-result loss">Derrota</span>
+        </div>
+        <div class="match-teams">
+          <div class="match-team">
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#16a34a"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="20" fill="#fff">FL</text>
+            </svg>
+            Fluminense-PI
+          </div>
+          <div class="match-score">2 — 0</div>
+          <div class="match-team" style="justify-content:flex-end;">
+            Piauí EC
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#e30613"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#0a1f4f"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#fff">P</text>
+            </svg>
+          </div>
+        </div>
+        <div class="match-meta">
+          <span>📍 Albertão</span>
+          <span>05/04/2026</span>
+        </div>
+      </div>
+
+      <!-- PASSADO 3 -->
+      <div class="match-card loss">
+        <div class="match-card-top">
+          <span class="match-comp">Copa do Nordeste · 4ª rod.</span>
+          <span class="match-result loss">Derrota</span>
+        </div>
+        <div class="match-teams">
+          <div class="match-team">
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#000"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#dc2626"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="20" fill="#fff">VIT</text>
+            </svg>
+            Vitória
+          </div>
+          <div class="match-score">3 — 1</div>
+          <div class="match-team" style="justify-content:flex-end;">
+            Piauí EC
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#e30613"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#0a1f4f"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#fff">P</text>
+            </svg>
+          </div>
+        </div>
+        <div class="match-meta">
+          <span>📍 Barradão</span>
+          <span>15/04/2026</span>
+        </div>
+      </div>
+
+      <!-- PRÓXIMO 1 -->
+      <div class="match-card upcoming">
+        <div class="match-card-top">
+          <span class="match-comp">Copa do Nordeste · 5ª rod.</span>
+          <span class="match-result upcoming">A jogar</span>
+        </div>
+        <div class="match-teams">
+          <div class="match-team">
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#e30613"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#0a1f4f"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#fff">P</text>
+            </svg>
+            Piauí EC
+          </div>
+          <div class="match-score upcoming">VS</div>
+          <div class="match-team" style="justify-content:flex-end;">
+            Confiança
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#16a34a"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="20" fill="#fff">CO</text>
+            </svg>
+          </div>
+        </div>
+        <div class="match-meta">
+          <span>📍 Lindolfo Monteiro · 21h30</span>
+          <span>29/04/2026</span>
+        </div>
+      </div>
+
+      <!-- PRÓXIMO 2 -->
+      <div class="match-card upcoming">
+        <div class="match-card-top">
+          <span class="match-comp">Brasileiro Série D · 4ª rod.</span>
+          <span class="match-result upcoming">A jogar</span>
+        </div>
+        <div class="match-teams">
+          <div class="match-team">
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#fbbf24"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="20" fill="#000">RP</text>
+            </svg>
+            River-PI
+          </div>
+          <div class="match-score upcoming">VS</div>
+          <div class="match-team" style="justify-content:flex-end;">
+            Piauí EC
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#e30613"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#0a1f4f"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#fff">P</text>
+            </svg>
+          </div>
+        </div>
+        <div class="match-meta">
+          <span>📍 Albertão · 16h</span>
+          <span>03/05/2026</span>
+        </div>
+      </div>
+
+      <!-- PRÓXIMO 3 -->
+      <div class="match-card upcoming">
+        <div class="match-card-top">
+          <span class="match-comp">Brasileiro Série D · 5ª rod.</span>
+          <span class="match-result upcoming">A jogar</span>
+        </div>
+        <div class="match-teams">
+          <div class="match-team">
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#e30613"/>
+              <path d="M50 12 L88 24 L88 65 Q88 94 50 109 Q12 94 12 65 L12 24 Z" fill="#0a1f4f"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#fff">P</text>
+            </svg>
+            Piauí EC
+          </div>
+          <div class="match-score upcoming">VS</div>
+          <div class="match-team" style="justify-content:flex-end;">
+            Tocantinópolis
+            <svg class="match-team-mini" viewBox="0 0 100 120">
+              <path d="M50 3 L97 18 L97 65 Q97 100 50 117 Q3 100 3 65 L3 18 Z" fill="#1e40af"/>
+              <text x="50" y="74" text-anchor="middle" font-family="Archivo Black" font-size="20" fill="#fff">TO</text>
+            </svg>
+          </div>
+        </div>
+        <div class="match-meta">
+          <span>📍 Lindolfo Monteiro · 16h</span>
+          <span>10/05/2026</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PLANOS -->
+<section class="plans" id="planos">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">Escolha o seu plano</div>
+      <h2>Três jeitos<br>de <span class="accent">vibrar junto</span></h2>
+    </div>
+  </div>
+
+  <div class="plans-tabs">
+    <button class="tab active">Pessoa Física</button>
+    <button class="tab">Empresas</button>
+  </div>
+
+  <div class="plans-grid">
+    <!-- Plano 1 -->
+    <div class="plan">
+      <div class="plan-name">Iniciante</div>
+      <div class="plan-price">
+        <span class="currency">R$</span>
+        <span class="amount">0</span>
+      </div>
+      <p class="plan-tagline">Comece a torcer com vantagens básicas, sem custo.</p>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>20% de desconto em ingressos</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Carteirinha digital</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Newsletter exclusiva</li>
+      </ul>
+      <a href="#" class="btn btn-ghost">Começar grátis</a>
+    </div>
+
+    <!-- Plano 2 - DESTAQUE -->
+    <div class="plan featured">
+      <div class="plan-badge">★ Mais popular</div>
+      <div class="plan-name">Vibrante+</div>
+      <div class="plan-price">
+        <span class="currency">R$</span>
+        <span class="amount">29</span>
+        <span class="period">,90 / mês</span>
+      </div>
+      <p class="plan-tagline">O equilíbrio perfeito entre preço e benefícios para o torcedor de coração.</p>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Ingresso gratuito (arquibancada)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>20% off na loja oficial</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Desconto em lojas parceiras</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Prioridade em eventos</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Carteirinha + brinde de boas-vindas</li>
+      </ul>
+      <a href="#" class="btn btn-primary">Assinar agora <span class="btn-arrow">→</span></a>
+    </div>
+
+    <!-- Plano 3 -->
+    <div class="plan">
+      <div class="plan-name">Vibrante Plus</div>
+      <div class="plan-price">
+        <span class="currency">R$</span>
+        <span class="amount">49</span>
+        <span class="period">,90 / mês</span>
+      </div>
+      <p class="plan-tagline">Para quem quer estar perto do time e viver experiências exclusivas.</p>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Cadeira garantida em todos os jogos</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>30% off na loja oficial</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Visitas ao CT do clube</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Encontros com jogadores</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Camisa oficial de presente</li>
+      </ul>
+      <a href="#" class="btn btn-ghost">Quero esse plano</a>
+    </div>
+  </div>
+
+  <div class="plan-empresa-link">
+    <a href="#">Ver planos para empresas →</a>
+  </div>
+</section>
+
+<!-- LOJA -->
+<section class="shop" id="loja">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">Loja oficial</div>
+      <h2>Vista as <span class="accent">cores</span><br>do tricolor piauiense</h2>
+    </div>
+  </div>
+
+  <div class="shop-grid">
+    <div class="product">
+      <div class="product-tag">Lançamento</div>
+      <div class="product-image">
+        <svg class="jersey-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 30 L80 20 L100 35 L120 20 L150 30 L175 50 L165 80 L150 75 L150 200 L50 200 L50 75 L35 80 L25 50 Z" fill="#0a1f4f" stroke="#fff" stroke-width="2"/>
+          <rect x="80" y="100" width="40" height="8" fill="#e30613"/>
+          <rect x="80" y="115" width="40" height="3" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Camisa Oficial</div>
+        <div class="product-name">Camisa I Piauí 2026</div>
+        <div class="product-price">R$ 140,00</div>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-image">
+        <svg class="jersey-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 30 L80 20 L100 35 L120 20 L150 30 L175 50 L165 80 L150 75 L150 200 L50 200 L50 75 L35 80 L25 50 Z" fill="#fff" stroke="#0a1f4f" stroke-width="2"/>
+          <rect x="50" y="80" width="100" height="15" fill="#e30613"/>
+          <rect x="50" y="100" width="100" height="6" fill="#0a1f4f"/>
+        </svg>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Camisa Oficial</div>
+        <div class="product-name">Camisa II Piauí 2026</div>
+        <div class="product-price">R$ 140,00</div>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-tag">-20%</div>
+      <div class="product-image">
+        <svg class="jersey-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="120" rx="75" ry="20" fill="#0a1f4f"/>
+          <path d="M30 120 Q30 50 100 50 Q170 50 170 120 Z" fill="#0a1f4f" stroke="#fff" stroke-width="2"/>
+          <text x="100" y="100" text-anchor="middle" fill="#e30613" font-family="Archivo Black" font-size="22" font-weight="900">PEC</text>
+        </svg>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Acessório</div>
+        <div class="product-name">Boné Oficial PEC</div>
+        <div class="product-price">R$ 51,00</div>
+      </div>
+    </div>
+
+    <div class="product">
+      <div class="product-image">
+        <svg class="jersey-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+          <rect x="60" y="40" width="80" height="160" rx="6" fill="#e30613" stroke="#fff" stroke-width="2"/>
+          <rect x="70" y="60" width="60" height="100" fill="#fff"/>
+          <text x="100" y="120" text-anchor="middle" fill="#0a1f4f" font-family="Archivo Black" font-size="36" font-weight="900">12</text>
+          <text x="100" y="180" text-anchor="middle" fill="#fff" font-family="Archivo Black" font-size="14">VIBRANTE</text>
+        </svg>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Torcida</div>
+        <div class="product-name">Bandeira Oficial</div>
+        <div class="product-price">R$ 79,00</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARCEIROS -->
+<section class="partners" id="parceiros">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">Parceiros oficiais</div>
+      <h2>Marcas que <span class="accent">acreditam</span><br>no Piauizão</h2>
+    </div>
+  </div>
+  <div class="partners-grid">
+    <div class="partner">J.MONTE</div>
+    <div class="partner">DURAFIX</div>
+    <div class="partner">AMANCO</div>
+    <div class="partner">CORAL</div>
+    <div class="partner">USINA SANTANA</div>
+    <div class="partner">PARCEIRO 06</div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="final-cta">
+  <div class="final-cta-content">
+    <h2>Não é só um clube.<br><span class="stroke">É a torcida</span><br>do <span style="color:var(--vermelho);">Piauí inteiro.</span></h2>
+    <p>Junte-se aos +1.247 sócios que já vibram junto com o tricolor. Cadastre-se em menos de 2 minutos.</p>
+    <a href="#planos" class="btn btn-primary btn-hero">Quero ser sócio agora <span class="btn-arrow">→</span></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-shield"><span>PEC</span></div>
+        <div class="logo-text">
+          PIAUÍ ESPORTE CLUBE
+          <small>FUNDADO EM 1948</small>
+        </div>
+      </div>
+      <p>O Piauí Esporte Clube carrega o nome do estado no peito desde 1948. Nascido em Teresina, é tradição, paixão e história em campo.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Sócio Torcedor</h4>
+      <ul>
+        <li><a href="#">Planos</a></li>
+        <li><a href="#">Benefícios</a></li>
+        <li><a href="#">Como funciona</a></li>
+        <li><a href="#">Carteirinha</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Institucional</h4>
+      <ul>
+        <li><a href="#">Sobre o clube</a></li>
+        <li><a href="#">Transparência</a></li>
+        <li><a href="#">Notícias</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="#">Usina Santana</a></li>
+        <li><a href="#">Teresina/PI</a></li>
+        <li><a href="#">timemarketing.pec@gmail.com</a></li>
+        <li><a href="#">+55 (86) 9 9946-5946</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Piauí Esporte Clube — Todos os direitos reservados.</span>
+    <div class="socials">
+      <a href="#" aria-label="Instagram">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1" fill="currentColor"/></svg>
+      </a>
+      <a href="#" aria-label="Facebook">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+      <a href="#" aria-label="X">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="#" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header transforma no scroll
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      header.style.padding = '12px 48px';
+      header.style.background = 'rgba(2,6,15,.95)';
+    } else {
+      header.style.padding = '18px 48px';
+      header.style.background = 'rgba(5,15,44,.78)';
+    }
+  });
+
+  // Tabs dos planos (visual)
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // Animação dos números das stats
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'count .8s ease forwards';
+      }
+    });
+  }, {threshold: 0.5});
+  document.querySelectorAll('.stat-num').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
