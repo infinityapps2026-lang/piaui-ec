@@ -59,18 +59,12 @@ export default function SiteHeader() {
 
       {/* CTA */}
       <div className="flex gap-2.5">
-        <a
-          href="#planos"
-          className="hidden md:inline-flex items-center gap-2 px-[22px] py-3 text-[11px] tracking-[.18em] uppercase font-bold border border-white/25 text-white no-underline hover:border-pec-vermelho hover:text-pec-vermelho transition-colors"
-        >
-          Entrar
-        </a>
-        <a
-          href="#planos"
+        <Link
+          href="/seja-socio"
           className="inline-flex items-center gap-2 px-[22px] py-3 text-[11px] tracking-[.18em] uppercase font-bold bg-pec-vermelho text-white no-underline hover:bg-pec-vermelho-deep hover:-translate-y-0.5 transition-all shadow-[0_8px_24px_-8px_#e30613]"
         >
-          Associe-se <span className="text-sm transition-transform group-hover:translate-x-1">→</span>
-        </a>
+          Associe-se <span className="text-sm">→</span>
+        </Link>
       </div>
     </header>
   )

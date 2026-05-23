@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 const CHECK = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-[18px] h-[18px] shrink-0 text-pec-vermelho">
@@ -163,8 +164,8 @@ export default function Planos() {
                 </li>
               ))}
             </ul>
-            <a
-              href="#contato"
+            <Link
+              href={`/seja-socio?plano=${encodeURIComponent(p.name)}`}
               className={`w-full flex items-center justify-center gap-2 py-4 text-[11px] tracking-[.18em] uppercase font-bold no-underline transition-all ${
                 p.featured
                   ? 'bg-pec-vermelho text-white hover:bg-pec-vermelho-deep'
@@ -172,7 +173,7 @@ export default function Planos() {
               }`}
             >
               {p.cta} {p.featured && <span>→</span>}
-            </a>
+            </Link>
           </div>
         ))}
       </div>

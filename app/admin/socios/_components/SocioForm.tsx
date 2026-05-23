@@ -20,7 +20,7 @@ type Socio = {
   uf: string | null
 }
 
-const PLANOS = ['Torcedor', 'Sócio Prata', 'Sócio Ouro', 'Sócio Master']
+const PLANOS = ['Iniciante', 'Vibrante+', 'Vibrante Plus', 'Bronze', 'Ouro', 'Master']
 
 const STATUS_OPTIONS = [
   { value: 'ativo', label: 'Ativo' },

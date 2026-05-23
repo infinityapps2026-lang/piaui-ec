@@ -2,10 +2,9 @@ import type { ReactNode } from 'react'
 import { Shield } from '@/app/_components/SiteHeader'
 
 const COL_SOCIO = [
-  { href: '#planos', label: 'Planos' },
-  { href: '#planos', label: 'Benefícios' },
-  { href: '#planos', label: 'Como funciona' },
-  { href: '#planos', label: 'Carteirinha' },
+  { href: '/seja-socio',          label: 'Associe-se' },
+  { href: '/#planos',             label: 'Planos e Benefícios' },
+  { href: '/seja-socio/obrigado', label: 'Como funciona' },
 ]
 
 const COL_INSTITUCIONAL = [
