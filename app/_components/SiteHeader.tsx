@@ -5,12 +5,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 const NAV = [
-  { href: '#jogos',    label: 'Jogos' },
-  { href: '#planos',   label: 'Seja Sócio' },
-  { href: '#loja',     label: 'Loja' },
+  { href: '#jogos',         label: 'Jogos' },
+  { href: '#planos',        label: 'Seja Sócio' },
+  { href: '/noticias',      label: 'Notícias' },
+  { href: '#loja',          label: 'Loja' },
   { href: '/transparencia', label: 'Transparência' },
-  { href: '#parceiros', label: 'Parceiros' },
-  { href: '#contato',  label: 'Contato' },
+  { href: '#parceiros',     label: 'Parceiros' },
 ]
 
 export default function SiteHeader() {

@@ -10,9 +10,8 @@ const COL_SOCIO = [
 
 const COL_INSTITUCIONAL = [
   { href: '/transparencia', label: 'Transparência' },
-  { href: '#', label: 'Sobre o clube' },
-  { href: '#', label: 'Notícias' },
-  { href: '#contato', label: 'Contato' },
+  { href: '/noticias',      label: 'Notícias' },
+  { href: '#contato',       label: 'Contato' },
 ]
 
 const COL_CONTATO = [
