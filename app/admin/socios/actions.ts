@@ -1,13 +1,13 @@
 'use server'
 
+import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function criarSocio(formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('socios').insert({
     nome_completo: formData.get('nome_completo') as string,
@@ -32,9 +32,8 @@ export async function criarSocio(formData: FormData) {
 }
 
 export async function atualizarSocio(id: string, formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase
     .from('socios')
@@ -62,9 +61,8 @@ export async function atualizarSocio(id: string, formData: FormData) {
 }
 
 export async function deletarSocio(formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('socios').delete().eq('id', formData.get('id'))
   if (error) throw new Error(error.message)

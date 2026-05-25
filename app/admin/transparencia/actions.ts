@@ -1,13 +1,13 @@
 'use server'
 
+import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function criarDocumento(formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('transparencia').insert({
     titulo: formData.get('titulo') as string,
@@ -26,9 +26,8 @@ export async function criarDocumento(formData: FormData) {
 }
 
 export async function atualizarDocumento(id: string, formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase
     .from('transparencia')
@@ -50,9 +49,8 @@ export async function atualizarDocumento(id: string, formData: FormData) {
 }
 
 export async function deletarDocumento(formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('transparencia').delete().eq('id', formData.get('id'))
   if (error) throw new Error(error.message)

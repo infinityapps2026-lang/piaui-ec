@@ -1,5 +1,6 @@
 'use server'
 
+import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -14,9 +15,8 @@ function slugify(text: string) {
 }
 
 export async function criarNoticia(formData: FormData) {
+  await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const titulo = formData.get('titulo') as string
   const resumo = formData.get('resumo') as string
@@ -48,9 +48,8 @@ export async function criarNoticia(formData: FormData) {
 }
 
 export async function atualizarNoticia(id: string, formData: FormData) {
+  await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const titulo = formData.get('titulo') as string
   const resumo = formData.get('resumo') as string
@@ -85,9 +84,8 @@ export async function atualizarNoticia(id: string, formData: FormData) {
 }
 
 export async function deletarNoticia(formData: FormData) {
+  await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const id = formData.get('id') as string
 

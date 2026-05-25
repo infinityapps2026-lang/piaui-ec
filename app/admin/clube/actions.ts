@@ -1,13 +1,13 @@
 'use server'
 
+import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function atualizarInfo(id: string, formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase
     .from('clube_info')
@@ -24,9 +24,8 @@ export async function atualizarInfo(id: string, formData: FormData) {
 }
 
 export async function criarInfo(formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const chave = (formData.get('chave') as string)
     .toLowerCase()
@@ -46,9 +45,8 @@ export async function criarInfo(formData: FormData) {
 }
 
 export async function deletarInfo(formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('clube_info').delete().eq('id', formData.get('id'))
   if (error) throw new Error(error.message)

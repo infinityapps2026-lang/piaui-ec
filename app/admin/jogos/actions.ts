@@ -1,13 +1,13 @@
 'use server'
 
+import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function criarJogo(formData: FormData) {
+  await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('jogos').insert({
     competicao: formData.get('competicao') as string,
@@ -32,9 +32,8 @@ export async function criarJogo(formData: FormData) {
 }
 
 export async function atualizarJogo(id: string, formData: FormData) {
+  await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase
     .from('jogos')
@@ -62,9 +61,8 @@ export async function atualizarJogo(id: string, formData: FormData) {
 }
 
 export async function deletarJogo(formData: FormData) {
+  await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('jogos').delete().eq('id', formData.get('id'))
   if (error) throw new Error(error.message)

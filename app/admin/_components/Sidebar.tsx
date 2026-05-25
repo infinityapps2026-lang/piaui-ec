@@ -12,26 +12,38 @@ import {
   Handshake,
   UserCheck,
   Building2,
+  ShieldCheck,
 } from 'lucide-react'
+import { type Role, ROLE_WEIGHT } from '@/lib/types'
 
-const menuItems = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/noticias', label: 'Notícias', icon: Newspaper },
-  { href: '/admin/jogos', label: 'Jogos', icon: Trophy },
-  { href: '/admin/classificacao', label: 'Classificação', icon: Table2 },
-  { href: '/admin/elenco', label: 'Elenco', icon: Users },
-  { href: '/admin/transparencia', label: 'Transparência', icon: FileText },
-  { href: '/admin/patrocinadores', label: 'Patrocinadores', icon: Handshake },
-  { href: '/admin/socios', label: 'Sócios', icon: UserCheck },
-  { href: '/admin/clube', label: 'O Clube', icon: Building2 },
+type MenuItem = {
+  href: string
+  label: string
+  icon: React.ElementType
+  minRole: Role
+}
+
+const menuItems: MenuItem[] = [
+  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, minRole: 'editor' },
+  { href: '/admin/noticias', label: 'Notícias', icon: Newspaper, minRole: 'editor' },
+  { href: '/admin/jogos', label: 'Jogos', icon: Trophy, minRole: 'editor' },
+  { href: '/admin/elenco', label: 'Elenco', icon: Users, minRole: 'editor' },
+  { href: '/admin/classificacao', label: 'Classificação', icon: Table2, minRole: 'admin' },
+  { href: '/admin/transparencia', label: 'Transparência', icon: FileText, minRole: 'admin' },
+  { href: '/admin/patrocinadores', label: 'Patrocinadores', icon: Handshake, minRole: 'admin' },
+  { href: '/admin/socios', label: 'Sócios', icon: UserCheck, minRole: 'admin' },
+  { href: '/admin/clube', label: 'O Clube', icon: Building2, minRole: 'admin' },
+  { href: '/admin/usuarios', label: 'Usuários', icon: ShieldCheck, minRole: 'super_admin' },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ role }: { role: Role }) {
   const pathname = usePathname()
+  const visibleItems = menuItems.filter(
+    (item) => ROLE_WEIGHT[role] >= ROLE_WEIGHT[item.minRole]
+  )
 
   return (
     <aside className="w-64 bg-[#050f2c] text-white flex flex-col h-screen sticky top-0">
-      {/* Logo / Header da sidebar */}
       <div className="p-6 border-b border-white/10">
         <div className="flex items-center gap-3">
           <div
@@ -51,13 +63,12 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Menu de navegação */}
       <nav className="flex-1 py-4 overflow-y-auto">
         <div className="px-3 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
           Conteúdo
         </div>
         <ul className="space-y-1 px-3">
-          {menuItems.map((item) => {
+          {visibleItems.map((item) => {
             const Icon = item.icon
             const isActive =
               item.href === '/admin'
@@ -83,7 +94,6 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      {/* Footer da sidebar */}
       <div className="p-4 border-t border-white/10 text-[10px] text-slate-500 tracking-wider">
         © 2026 Piauí Esporte Clube
       </div>

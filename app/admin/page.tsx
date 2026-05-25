@@ -1,12 +1,12 @@
+import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
-import { redirect } from 'next/navigation'
+import { ROLE_WEIGHT, type Role } from '@/lib/types'
 import { Newspaper, Trophy, Users, FileText, Handshake, UserCheck } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function AdminDashboard() {
+  const { role } = await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const [noticias, jogos, jogadores, transparencia, patrocinadores, socios] = await Promise.all([
     supabase.from('noticias').select('id', { count: 'exact', head: true }),
@@ -17,50 +17,16 @@ export default async function AdminDashboard() {
     supabase.from('socios').select('id', { count: 'exact', head: true }),
   ])
 
-  const cards = [
-    {
-      label: 'Notícias',
-      value: noticias.count ?? 0,
-      icon: Newspaper,
-      href: '/admin/noticias',
-      color: 'text-blue-600 bg-blue-50',
-    },
-    {
-      label: 'Jogos',
-      value: jogos.count ?? 0,
-      icon: Trophy,
-      href: '/admin/jogos',
-      color: 'text-amber-600 bg-amber-50',
-    },
-    {
-      label: 'Jogadores ativos',
-      value: jogadores.count ?? 0,
-      icon: Users,
-      href: '/admin/elenco',
-      color: 'text-green-600 bg-green-50',
-    },
-    {
-      label: 'Documentos',
-      value: transparencia.count ?? 0,
-      icon: FileText,
-      href: '/admin/transparencia',
-      color: 'text-purple-600 bg-purple-50',
-    },
-    {
-      label: 'Patrocinadores',
-      value: patrocinadores.count ?? 0,
-      icon: Handshake,
-      href: '/admin/patrocinadores',
-      color: 'text-pink-600 bg-pink-50',
-    },
-    {
-      label: 'Sócios',
-      value: socios.count ?? 0,
-      icon: UserCheck,
-      href: '/admin/socios',
-      color: 'text-teal-600 bg-teal-50',
-    },
+  const allCards = [
+    { label: 'Notícias', value: noticias.count ?? 0, icon: Newspaper, href: '/admin/noticias', color: 'text-blue-600 bg-blue-50', minRole: 'editor' as Role },
+    { label: 'Jogos', value: jogos.count ?? 0, icon: Trophy, href: '/admin/jogos', color: 'text-amber-600 bg-amber-50', minRole: 'editor' as Role },
+    { label: 'Jogadores ativos', value: jogadores.count ?? 0, icon: Users, href: '/admin/elenco', color: 'text-green-600 bg-green-50', minRole: 'editor' as Role },
+    { label: 'Documentos', value: transparencia.count ?? 0, icon: FileText, href: '/admin/transparencia', color: 'text-purple-600 bg-purple-50', minRole: 'admin' as Role },
+    { label: 'Patrocinadores', value: patrocinadores.count ?? 0, icon: Handshake, href: '/admin/patrocinadores', color: 'text-pink-600 bg-pink-50', minRole: 'admin' as Role },
+    { label: 'Sócios', value: socios.count ?? 0, icon: UserCheck, href: '/admin/socios', color: 'text-teal-600 bg-teal-50', minRole: 'admin' as Role },
   ]
+
+  const cards = allCards.filter((c) => ROLE_WEIGHT[role] >= ROLE_WEIGHT[c.minRole])
 
   return (
     <div>

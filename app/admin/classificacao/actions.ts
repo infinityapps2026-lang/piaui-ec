@@ -1,13 +1,13 @@
 'use server'
 
+import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function criarTime(formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('classificacao').insert({
     grupo:      formData.get('grupo') as string,
@@ -30,9 +30,8 @@ export async function criarTime(formData: FormData) {
 }
 
 export async function atualizarTime(id: string, formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase
     .from('classificacao')
@@ -58,9 +57,8 @@ export async function atualizarTime(id: string, formData: FormData) {
 }
 
 export async function deletarTime(formData: FormData) {
+  await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/admin/login')
 
   const { error } = await supabase.from('classificacao').delete().eq('id', formData.get('id'))
   if (error) throw new Error(error.message)
