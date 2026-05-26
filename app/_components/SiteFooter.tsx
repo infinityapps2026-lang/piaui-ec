@@ -14,8 +14,8 @@ const COL_INSTITUCIONAL = [
 ]
 
 const COL_CONTATO = [
-  { href: '#', label: 'Usina Santana' },
-  { href: '#', label: 'Teresina/PI' },
+  { href: null, label: 'Usina Santana' },
+  { href: null, label: 'Teresina/PI' },
   { href: 'mailto:timemarketing.pec@gmail.com', label: 'timemarketing.pec@gmail.com' },
   { href: 'tel:+558699465946', label: '+55 (86) 9 9946-5946' },
 ]
@@ -88,19 +88,23 @@ export default function SiteFooter() {
   )
 }
 
-function FooterCol({ title, links }: { title: string; links: { href: string; label: string }[] }) {
+function FooterCol({ title, links }: { title: string; links: { href: string | null; label: string }[] }) {
   return (
     <div>
       <h4 className="font-archivo font-black text-[12px] tracking-[.2em] uppercase text-white mb-5">{title}</h4>
       <ul className="space-y-3 list-none p-0">
         {links.map((l) => (
           <li key={l.label}>
-            <a
-              href={l.href}
-              className="text-[13px] text-pec-cinza hover:text-pec-vermelho transition-colors no-underline"
-            >
-              {l.label}
-            </a>
+            {l.href ? (
+              <a
+                href={l.href}
+                className="text-[13px] text-pec-cinza hover:text-pec-vermelho transition-colors no-underline"
+              >
+                {l.label}
+              </a>
+            ) : (
+              <span className="text-[13px] text-pec-cinza">{l.label}</span>
+            )}
           </li>
         ))}
       </ul>

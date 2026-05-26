@@ -44,28 +44,38 @@ export default async function Parceiros() {
         <div className="max-w-[1380px] mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px"
           style={{ border: '1px solid rgba(255,255,255,.08)', background: 'rgba(255,255,255,.08)' }}
         >
-          {lista.map((p) => (
-            <a
-              key={p.id}
-              href={p.site_url ?? '#'}
-              target={p.site_url ? '_blank' : undefined}
-              rel="noopener noreferrer"
-              className="flex items-center justify-center p-8 min-h-[100px] bg-pec-preto transition-colors duration-300 hover:bg-pec-azul/20 no-underline group"
-            >
-              {p.logo_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={p.logo_url}
-                  alt={p.nome}
-                  className="max-h-10 max-w-full object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300 grayscale group-hover:grayscale-0"
-                />
-              ) : (
-                <span className="font-archivo font-black text-[13px] tracking-[.12em] uppercase text-pec-cinza group-hover:text-white transition-colors duration-300">
-                  {p.nome}
-                </span>
-              )}
-            </a>
-          ))}
+          {lista.map((p) => {
+            const content = p.logo_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={p.logo_url}
+                alt={p.nome}
+                className="max-h-10 max-w-full object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300 grayscale group-hover:grayscale-0"
+              />
+            ) : (
+              <span className="font-archivo font-black text-[13px] tracking-[.12em] uppercase text-pec-cinza group-hover:text-white transition-colors duration-300">
+                {p.nome}
+              </span>
+            )
+            return p.site_url ? (
+              <a
+                key={p.id}
+                href={p.site_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center p-8 min-h-[100px] bg-pec-preto transition-colors duration-300 hover:bg-pec-azul/20 no-underline group"
+              >
+                {content}
+              </a>
+            ) : (
+              <div
+                key={p.id}
+                className="flex items-center justify-center p-8 min-h-[100px] bg-pec-preto group"
+              >
+                {content}
+              </div>
+            )
+          })}
         </div>
       ) : (
         <div className="max-w-[1380px] mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px"
