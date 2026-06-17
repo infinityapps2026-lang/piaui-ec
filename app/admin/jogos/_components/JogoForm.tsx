@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { criarJogo, atualizarJogo } from '../actions'
 
 type Jogo = {
@@ -143,6 +144,7 @@ export default function JogoForm({ jogo }: { jogo?: Jogo }) {
         await criarJogo(formData)
       }
     } catch (err) {
+      if (isRedirectError(err)) throw err
       setError(err instanceof Error ? err.message : 'Erro ao salvar')
       setUploading(false)
     }

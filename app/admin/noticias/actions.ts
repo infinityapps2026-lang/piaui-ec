@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
+export type NoticiaFormState = { error: string | null }
+
 function slugify(text: string) {
   return text
     .toLowerCase()
@@ -14,7 +16,7 @@ function slugify(text: string) {
     .replace(/(^-|-$)/g, '')
 }
 
-export async function criarNoticia(formData: FormData) {
+export async function criarNoticia(prevState: NoticiaFormState, formData: FormData): Promise<NoticiaFormState> {
   await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
 
@@ -41,13 +43,13 @@ export async function criarNoticia(formData: FormData) {
     data_publicacao: data_publicacao || null,
   })
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/noticias')
   redirect('/admin/noticias')
 }
 
-export async function atualizarNoticia(id: string, formData: FormData) {
+export async function atualizarNoticia(id: string, prevState: NoticiaFormState, formData: FormData): Promise<NoticiaFormState> {
   await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
 
@@ -77,7 +79,7 @@ export async function atualizarNoticia(id: string, formData: FormData) {
     })
     .eq('id', id)
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/noticias')
   redirect('/admin/noticias')

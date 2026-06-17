@@ -1,7 +1,7 @@
 'use client'
 
-import { useFormStatus } from 'react-dom'
-import { criarNoticia, atualizarNoticia } from '../actions'
+import { useActionState } from 'react'
+import { criarNoticia, atualizarNoticia, type NoticiaFormState } from '../actions'
 
 type Noticia = {
   id: string
@@ -17,26 +17,24 @@ type Noticia = {
 
 const CATEGORIAS = ['Notícia', 'Jogo', 'Contratação', 'Institucional', 'Sócio']
 
-function SubmitButton({ isEdit }: { isEdit: boolean }) {
-  const { pending } = useFormStatus()
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] disabled:opacity-50 text-white text-sm font-bold rounded-lg transition-colors"
-    >
-      {pending ? 'Salvando...' : isEdit ? 'Salvar Alterações' : 'Criar Notícia'}
-    </button>
-  )
-}
-
 export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
-  const action = noticia
+  const boundAction = noticia
     ? atualizarNoticia.bind(null, noticia.id)
     : criarNoticia
 
+  const [state, formAction, pending] = useActionState<NoticiaFormState, FormData>(
+    boundAction,
+    { error: null }
+  )
+
   return (
-    <form action={action} className="space-y-6">
+    <form action={formAction} className="space-y-6">
+      {state.error && (
+        <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+          {state.error}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">
           <label className="block text-sm font-semibold text-slate-700 mb-1">
@@ -154,7 +152,13 @@ export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
       </div>
 
       <div className="flex gap-3 pt-4 border-t border-slate-200">
-        <SubmitButton isEdit={!!noticia} />
+        <button
+          type="submit"
+          disabled={pending}
+          className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] disabled:opacity-50 text-white text-sm font-bold rounded-lg transition-colors"
+        >
+          {pending ? 'Salvando...' : noticia ? 'Salvar Alterações' : 'Criar Notícia'}
+        </button>
         <a
           href="/admin/noticias"
           className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-lg transition-colors"

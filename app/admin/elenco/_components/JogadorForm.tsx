@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { criarJogador, atualizarJogador } from '../actions'
 import { Upload, X, UserCircle } from 'lucide-react'
 
@@ -90,6 +91,7 @@ export default function JogadorForm({ jogador }: { jogador?: Jogador }) {
         await criarJogador(formData)
       }
     } catch (err) {
+      if (isRedirectError(err)) throw err
       setErro(err instanceof Error ? err.message : 'Erro inesperado')
       setPending(false)
     }
