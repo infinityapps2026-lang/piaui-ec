@@ -113,7 +113,7 @@ export default function Hero({ sociosCount }: Props) {
 
             {/* Logo oficial */}
             <Image
-              src="/imagem/logo.png"
+              src="/imagem/rato.png"
               alt="Escudo Piauí Esporte Clube"
               width={340}
               height={340}
