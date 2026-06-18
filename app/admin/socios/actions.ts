@@ -5,33 +5,35 @@ import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function criarSocio(formData: FormData) {
+export type SocioFormState = { error: string | null }
+
+export async function criarSocio(prevState: SocioFormState, formData: FormData): Promise<SocioFormState> {
   await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
 
   const { error } = await supabase.from('socios').insert({
     nome_completo: formData.get('nome_completo') as string,
-    cpf: (formData.get('cpf') as string) || null,
-    email: (formData.get('email') as string) || null,
-    telefone: (formData.get('telefone') as string) || null,
-    plano: formData.get('plano') as string,
-    status: formData.get('status') as string,
-    cep: (formData.get('cep') as string) || null,
-    logradouro: (formData.get('logradouro') as string) || null,
-    numero: (formData.get('numero') as string) || null,
-    complemento: (formData.get('complemento') as string) || null,
-    bairro: (formData.get('bairro') as string) || null,
-    cidade: (formData.get('cidade') as string) || null,
-    uf: (formData.get('uf') as string) || null,
+    cpf:          (formData.get('cpf') as string) || null,
+    email:        (formData.get('email') as string) || null,
+    telefone:     (formData.get('telefone') as string) || null,
+    plano:        formData.get('plano') as string,
+    status:       formData.get('status') as string,
+    cep:          (formData.get('cep') as string) || null,
+    logradouro:   (formData.get('logradouro') as string) || null,
+    numero:       (formData.get('numero') as string) || null,
+    complemento:  (formData.get('complemento') as string) || null,
+    bairro:       (formData.get('bairro') as string) || null,
+    cidade:       (formData.get('cidade') as string) || null,
+    uf:           (formData.get('uf') as string) || null,
   })
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/socios')
   redirect('/admin/socios')
 }
 
-export async function atualizarSocio(id: string, formData: FormData) {
+export async function atualizarSocio(id: string, prevState: SocioFormState, formData: FormData): Promise<SocioFormState> {
   await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
 
@@ -39,22 +41,22 @@ export async function atualizarSocio(id: string, formData: FormData) {
     .from('socios')
     .update({
       nome_completo: formData.get('nome_completo') as string,
-      cpf: (formData.get('cpf') as string) || null,
-      email: (formData.get('email') as string) || null,
-      telefone: (formData.get('telefone') as string) || null,
-      plano: formData.get('plano') as string,
-      status: formData.get('status') as string,
-      cep: (formData.get('cep') as string) || null,
-      logradouro: (formData.get('logradouro') as string) || null,
-      numero: (formData.get('numero') as string) || null,
-      complemento: (formData.get('complemento') as string) || null,
-      bairro: (formData.get('bairro') as string) || null,
-      cidade: (formData.get('cidade') as string) || null,
-      uf: (formData.get('uf') as string) || null,
+      cpf:          (formData.get('cpf') as string) || null,
+      email:        (formData.get('email') as string) || null,
+      telefone:     (formData.get('telefone') as string) || null,
+      plano:        formData.get('plano') as string,
+      status:       formData.get('status') as string,
+      cep:          (formData.get('cep') as string) || null,
+      logradouro:   (formData.get('logradouro') as string) || null,
+      numero:       (formData.get('numero') as string) || null,
+      complemento:  (formData.get('complemento') as string) || null,
+      bairro:       (formData.get('bairro') as string) || null,
+      cidade:       (formData.get('cidade') as string) || null,
+      uf:           (formData.get('uf') as string) || null,
     })
     .eq('id', id)
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/socios')
   redirect('/admin/socios')

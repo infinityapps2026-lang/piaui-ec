@@ -1,7 +1,8 @@
 'use client'
 
-import { useFormStatus } from 'react-dom'
+import { useActionState } from 'react'
 import Link from 'next/link'
+import { criarUsuario, atualizarUsuario, type UsuarioFormState } from '../actions'
 
 type Usuario = {
   id: string
@@ -11,30 +12,21 @@ type Usuario = {
   ativo: boolean
 }
 
-function SubmitButton({ isEdit }: { isEdit: boolean }) {
-  const { pending } = useFormStatus()
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="bg-[#e30613] text-white px-6 py-2.5 rounded-md font-bold text-sm hover:bg-[#a8000a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-    >
-      {pending ? 'Salvando...' : isEdit ? 'Salvar alterações' : 'Criar usuário'}
-    </button>
+export default function UsuarioForm({ usuario }: { usuario?: Usuario }) {
+  const boundAction = usuario ? atualizarUsuario.bind(null, usuario.id) : criarUsuario
+  const [state, formAction, pending] = useActionState<UsuarioFormState, FormData>(
+    boundAction,
+    { error: null }
   )
-}
-
-export default function UsuarioForm({
-  action,
-  usuario,
-}: {
-  action: (formData: FormData) => Promise<void>
-  usuario?: Usuario
-}) {
-  const isEdit = !!usuario
 
   return (
-    <form action={action} className="max-w-lg space-y-5">
+    <form action={formAction} className="max-w-lg space-y-5">
+      {state.error && (
+        <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+          {state.error}
+        </div>
+      )}
+
       <div>
         <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
           Nome
@@ -49,7 +41,7 @@ export default function UsuarioForm({
         />
       </div>
 
-      {!isEdit && (
+      {!usuario && (
         <>
           <div>
             <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
@@ -96,7 +88,13 @@ export default function UsuarioForm({
       </div>
 
       <div className="flex items-center gap-4 pt-2">
-        <SubmitButton isEdit={isEdit} />
+        <button
+          type="submit"
+          disabled={pending}
+          className="bg-[#e30613] text-white px-6 py-2.5 rounded-md font-bold text-sm hover:bg-[#a8000a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {pending ? 'Salvando...' : usuario ? 'Salvar alterações' : 'Criar usuário'}
+        </button>
         <Link
           href="/admin/usuarios"
           className="text-sm text-slate-500 hover:text-slate-900 font-medium transition-colors"

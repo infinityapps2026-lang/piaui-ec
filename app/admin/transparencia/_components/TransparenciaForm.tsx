@@ -2,6 +2,7 @@
 
 import { useState, useRef, FormEvent } from 'react'
 import { createClient } from '@/lib/supabase'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { criarDocumento, atualizarDocumento } from '../actions'
 import { FileText, Upload, X, ExternalLink } from 'lucide-react'
 
@@ -71,6 +72,7 @@ export default function TransparenciaForm({ doc }: { doc?: Documento }) {
         await criarDocumento(formData)
       }
     } catch (err) {
+      if (isRedirectError(err)) throw err
       setErro(err instanceof Error ? err.message : 'Erro inesperado')
       setPending(false)
     }

@@ -1,7 +1,7 @@
 'use client'
 
-import { useFormStatus } from 'react-dom'
-import { criarSocio, atualizarSocio } from '../actions'
+import { useActionState } from 'react'
+import { criarSocio, atualizarSocio, type SocioFormState } from '../actions'
 
 type Socio = {
   id: string
@@ -35,24 +35,20 @@ const UFS = [
   'RO','RR','RS','SC','SE','SP','TO',
 ]
 
-function SubmitButton({ isEdit }: { isEdit: boolean }) {
-  const { pending } = useFormStatus()
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] disabled:opacity-50 text-white text-sm font-bold rounded-lg transition-colors"
-    >
-      {pending ? 'Salvando...' : isEdit ? 'Salvar Alterações' : 'Cadastrar Sócio'}
-    </button>
-  )
-}
-
 export default function SocioForm({ socio }: { socio?: Socio }) {
-  const action = socio ? atualizarSocio.bind(null, socio.id) : criarSocio
+  const boundAction = socio ? atualizarSocio.bind(null, socio.id) : criarSocio
+  const [state, formAction, pending] = useActionState<SocioFormState, FormData>(
+    boundAction,
+    { error: null }
+  )
 
   return (
-    <form action={action} className="space-y-8">
+    <form action={formAction} className="space-y-8">
+      {state.error && (
+        <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+          {state.error}
+        </div>
+      )}
 
       {/* Dados pessoais */}
       <div>
@@ -143,71 +139,31 @@ export default function SocioForm({ socio }: { socio?: Socio }) {
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold text-slate-700 mb-1">CEP</label>
-            <input
-              name="cep"
-              defaultValue={socio?.cep ?? ''}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-              placeholder="00000-000"
-            />
+            <input name="cep" defaultValue={socio?.cep ?? ''} className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent" placeholder="00000-000" />
           </div>
-
           <div className="md:col-span-4">
             <label className="block text-sm font-semibold text-slate-700 mb-1">Logradouro</label>
-            <input
-              name="logradouro"
-              defaultValue={socio?.logradouro ?? ''}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-              placeholder="Rua, Avenida..."
-            />
+            <input name="logradouro" defaultValue={socio?.logradouro ?? ''} className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent" placeholder="Rua, Avenida..." />
           </div>
-
           <div className="md:col-span-1">
             <label className="block text-sm font-semibold text-slate-700 mb-1">Número</label>
-            <input
-              name="numero"
-              defaultValue={socio?.numero ?? ''}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-              placeholder="Nº"
-            />
+            <input name="numero" defaultValue={socio?.numero ?? ''} className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent" placeholder="Nº" />
           </div>
-
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold text-slate-700 mb-1">Complemento</label>
-            <input
-              name="complemento"
-              defaultValue={socio?.complemento ?? ''}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-              placeholder="Apto, Bloco..."
-            />
+            <input name="complemento" defaultValue={socio?.complemento ?? ''} className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent" placeholder="Apto, Bloco..." />
           </div>
-
           <div className="md:col-span-3">
             <label className="block text-sm font-semibold text-slate-700 mb-1">Bairro</label>
-            <input
-              name="bairro"
-              defaultValue={socio?.bairro ?? ''}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-              placeholder="Bairro"
-            />
+            <input name="bairro" defaultValue={socio?.bairro ?? ''} className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent" placeholder="Bairro" />
           </div>
-
           <div className="md:col-span-4">
             <label className="block text-sm font-semibold text-slate-700 mb-1">Cidade</label>
-            <input
-              name="cidade"
-              defaultValue={socio?.cidade ?? ''}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-              placeholder="Teresina"
-            />
+            <input name="cidade" defaultValue={socio?.cidade ?? ''} className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent" placeholder="Teresina" />
           </div>
-
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold text-slate-700 mb-1">UF</label>
-            <select
-              name="uf"
-              defaultValue={socio?.uf ?? 'PI'}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] bg-white"
-            >
+            <select name="uf" defaultValue={socio?.uf ?? 'PI'} className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] bg-white">
               <option value="">—</option>
               {UFS.map((uf) => (
                 <option key={uf} value={uf}>{uf}</option>
@@ -218,7 +174,13 @@ export default function SocioForm({ socio }: { socio?: Socio }) {
       </div>
 
       <div className="flex gap-3 pt-4 border-t border-slate-200">
-        <SubmitButton isEdit={!!socio} />
+        <button
+          type="submit"
+          disabled={pending}
+          className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] disabled:opacity-50 text-white text-sm font-bold rounded-lg transition-colors"
+        >
+          {pending ? 'Salvando...' : socio ? 'Salvar Alterações' : 'Cadastrar Sócio'}
+        </button>
         <a
           href="/admin/socios"
           className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-lg transition-colors"

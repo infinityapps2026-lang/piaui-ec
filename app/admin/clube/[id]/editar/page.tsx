@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase-server'
-import { redirect, notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
-import { atualizarInfo } from '../../actions'
+import ClubeForm from '../../_components/ClubeForm'
 
 export default async function EditarInfoPage({
   params,
@@ -23,8 +23,6 @@ export default async function EditarInfoPage({
 
   if (!info) notFound()
 
-  const action = atualizarInfo.bind(null, id)
-
   return (
     <div>
       <div className="mb-8">
@@ -40,59 +38,7 @@ export default async function EditarInfoPage({
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 p-8">
-        <form action={action} className="space-y-6">
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1">
-              Chave
-            </label>
-            <input
-              value={info.chave}
-              disabled
-              className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono bg-slate-50 text-slate-400 cursor-not-allowed"
-            />
-            <p className="text-xs text-slate-400 mt-1">A chave não pode ser alterada após criação.</p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1">
-              Título *
-            </label>
-            <input
-              name="titulo"
-              required
-              defaultValue={info.titulo}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1">
-              Conteúdo *
-            </label>
-            <textarea
-              name="conteudo"
-              required
-              rows={12}
-              defaultValue={info.conteudo ?? ''}
-              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent resize-y"
-            />
-          </div>
-
-          <div className="flex gap-3 pt-4 border-t border-slate-200">
-            <button
-              type="submit"
-              className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] text-white text-sm font-bold rounded-lg transition-colors"
-            >
-              Salvar Alterações
-            </button>
-            <a
-              href="/admin/clube"
-              className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-lg transition-colors"
-            >
-              Cancelar
-            </a>
-          </div>
-        </form>
+        <ClubeForm info={info} />
       </div>
     </div>
   )

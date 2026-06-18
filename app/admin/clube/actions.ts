@@ -5,7 +5,9 @@ import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function atualizarInfo(id: string, formData: FormData) {
+export type ClubeFormState = { error: string | null }
+
+export async function atualizarInfo(id: string, prevState: ClubeFormState, formData: FormData): Promise<ClubeFormState> {
   await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
 
@@ -17,13 +19,13 @@ export async function atualizarInfo(id: string, formData: FormData) {
     })
     .eq('id', id)
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/clube')
   redirect('/admin/clube')
 }
 
-export async function criarInfo(formData: FormData) {
+export async function criarInfo(prevState: ClubeFormState, formData: FormData): Promise<ClubeFormState> {
   await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
 
@@ -38,7 +40,7 @@ export async function criarInfo(formData: FormData) {
     conteudo: formData.get('conteudo') as string,
   })
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/clube')
   redirect('/admin/clube')

@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { criarPatrocinador, atualizarPatrocinador } from '../actions'
 import { ImageIcon, Upload, X } from 'lucide-react'
 
@@ -74,6 +75,7 @@ export default function PatrocinadorForm({ pat }: { pat?: Patrocinador }) {
         await criarPatrocinador(formData)
       }
     } catch (err) {
+      if (isRedirectError(err)) throw err
       setErro(err instanceof Error ? err.message : 'Erro inesperado')
       setPending(false)
     }
@@ -93,7 +95,6 @@ export default function PatrocinadorForm({ pat }: { pat?: Patrocinador }) {
         <div className="md:col-span-2">
           <label className="block text-sm font-semibold text-slate-700 mb-2">Logo</label>
           <div className="flex items-start gap-6">
-            {/* Preview */}
             <div className="w-32 h-20 border-2 border-dashed border-slate-200 rounded-lg overflow-hidden bg-slate-50 flex items-center justify-center shrink-0">
               {preview ? (
                 <Image
@@ -109,7 +110,6 @@ export default function PatrocinadorForm({ pat }: { pat?: Patrocinador }) {
               )}
             </div>
 
-            {/* Ações */}
             <div className="flex flex-col gap-2 justify-center">
               <label className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg cursor-pointer transition-colors">
                 <Upload className="w-4 h-4" />
@@ -143,9 +143,7 @@ export default function PatrocinadorForm({ pat }: { pat?: Patrocinador }) {
 
         {/* Nome */}
         <div className="md:col-span-2">
-          <label className="block text-sm font-semibold text-slate-700 mb-1">
-            Nome *
-          </label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">Nome *</label>
           <input
             name="nome"
             required
@@ -157,9 +155,7 @@ export default function PatrocinadorForm({ pat }: { pat?: Patrocinador }) {
 
         {/* Categoria */}
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">
-            Categoria *
-          </label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">Categoria *</label>
           <select
             name="categoria"
             required
@@ -175,9 +171,7 @@ export default function PatrocinadorForm({ pat }: { pat?: Patrocinador }) {
 
         {/* Ordem */}
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">
-            Ordem de exibição
-          </label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">Ordem de exibição</label>
           <input
             name="ordem_exibicao"
             type="number"
@@ -189,9 +183,7 @@ export default function PatrocinadorForm({ pat }: { pat?: Patrocinador }) {
 
         {/* Site */}
         <div className="md:col-span-2">
-          <label className="block text-sm font-semibold text-slate-700 mb-1">
-            Site (URL)
-          </label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">Site (URL)</label>
           <input
             name="site_url"
             type="url"

@@ -1,6 +1,7 @@
 'use client'
 
-import { criarTime, atualizarTime } from '../actions'
+import { useActionState } from 'react'
+import { criarTime, atualizarTime, type ClassificacaoFormState } from '../actions'
 
 type Time = {
   id: string
@@ -17,25 +18,11 @@ type Time = {
   highlight: boolean
 }
 
-function Toggle({
-  name,
-  label,
-  defaultChecked,
-}: {
-  name: string
-  label: string
-  defaultChecked?: boolean
-}) {
+function Toggle({ name, label, defaultChecked }: { name: string; label: string; defaultChecked?: boolean }) {
   return (
     <label className="flex items-center gap-3 cursor-pointer select-none">
       <div className="relative">
-        <input
-          name={name}
-          type="checkbox"
-          value="true"
-          defaultChecked={defaultChecked}
-          className="sr-only peer"
-        />
+        <input name={name} type="checkbox" value="true" defaultChecked={defaultChecked} className="sr-only peer" />
         <div className="w-10 h-6 bg-slate-300 peer-checked:bg-[#0a1f4f] rounded-full transition-colors" />
         <div className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4" />
       </div>
@@ -44,17 +31,7 @@ function Toggle({
   )
 }
 
-function NumInput({
-  name,
-  label,
-  defaultValue,
-  min = 0,
-}: {
-  name: string
-  label: string
-  defaultValue?: number | string
-  min?: number
-}) {
+function NumInput({ name, label, defaultValue, min = 0 }: { name: string; label: string; defaultValue?: number | string; min?: number }) {
   return (
     <div>
       <label className="block text-sm font-semibold text-slate-700 mb-1">{label}</label>
@@ -71,12 +48,19 @@ function NumInput({
 }
 
 export default function ClassificacaoForm({ time }: { time?: Time }) {
-  const action = time
-    ? atualizarTime.bind(null, time.id)
-    : criarTime
+  const boundAction = time ? atualizarTime.bind(null, time.id) : criarTime
+  const [state, formAction, pending] = useActionState<ClassificacaoFormState, FormData>(
+    boundAction,
+    { error: null }
+  )
 
   return (
-    <form action={action} className="space-y-6">
+    <form action={formAction} className="space-y-6">
+      {state.error && (
+        <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+          {state.error}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -132,25 +116,18 @@ export default function ClassificacaoForm({ time }: { time?: Time }) {
         {/* Flags */}
         <div className="md:col-span-2 border-t border-slate-100 pt-4 space-y-4">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Marcações visuais</p>
-          <Toggle
-            name="classified"
-            label="Zona de classificação (destaque verde)"
-            defaultChecked={time?.classified ?? false}
-          />
-          <Toggle
-            name="highlight"
-            label="Piauí EC (destaque vermelho)"
-            defaultChecked={time?.highlight ?? false}
-          />
+          <Toggle name="classified" label="Zona de classificação (destaque verde)" defaultChecked={time?.classified ?? false} />
+          <Toggle name="highlight" label="Piauí EC (destaque vermelho)" defaultChecked={time?.highlight ?? false} />
         </div>
       </div>
 
       <div className="flex gap-3 pt-4 border-t border-slate-200">
         <button
           type="submit"
-          className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] text-white text-sm font-bold rounded-lg transition-colors"
+          disabled={pending}
+          className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] disabled:opacity-50 text-white text-sm font-bold rounded-lg transition-colors"
         >
-          {time ? 'Salvar Alterações' : 'Adicionar Time'}
+          {pending ? 'Salvando...' : time ? 'Salvar Alterações' : 'Adicionar Time'}
         </button>
         <a
           href="/admin/classificacao"

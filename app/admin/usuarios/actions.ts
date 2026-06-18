@@ -5,7 +5,9 @@ import { createAdminClient } from '@/lib/supabase-admin'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function criarUsuario(formData: FormData) {
+export type UsuarioFormState = { error: string | null }
+
+export async function criarUsuario(prevState: UsuarioFormState, formData: FormData): Promise<UsuarioFormState> {
   await requireRole(['super_admin'])
 
   const email = formData.get('email') as string
@@ -21,7 +23,7 @@ export async function criarUsuario(formData: FormData) {
     email_confirm: true,
   })
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   await supabase
     .from('profiles')
@@ -32,7 +34,7 @@ export async function criarUsuario(formData: FormData) {
   redirect('/admin/usuarios')
 }
 
-export async function atualizarUsuario(id: string, formData: FormData) {
+export async function atualizarUsuario(id: string, prevState: UsuarioFormState, formData: FormData): Promise<UsuarioFormState> {
   await requireRole(['super_admin'])
 
   const nome = formData.get('nome') as string
@@ -45,7 +47,7 @@ export async function atualizarUsuario(id: string, formData: FormData) {
     .update({ nome, role })
     .eq('id', id)
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/usuarios')
   redirect('/admin/usuarios')

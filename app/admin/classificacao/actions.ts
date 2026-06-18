@@ -5,7 +5,9 @@ import { createClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function criarTime(formData: FormData) {
+export type ClassificacaoFormState = { error: string | null }
+
+export async function criarTime(prevState: ClassificacaoFormState, formData: FormData): Promise<ClassificacaoFormState> {
   await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
 
@@ -23,13 +25,13 @@ export async function criarTime(formData: FormData) {
     highlight:  formData.get('highlight') === 'true',
   })
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/classificacao')
   redirect('/admin/classificacao')
 }
 
-export async function atualizarTime(id: string, formData: FormData) {
+export async function atualizarTime(id: string, prevState: ClassificacaoFormState, formData: FormData): Promise<ClassificacaoFormState> {
   await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
 
@@ -50,7 +52,7 @@ export async function atualizarTime(id: string, formData: FormData) {
     })
     .eq('id', id)
 
-  if (error) throw new Error(error.message)
+  if (error) return { error: error.message }
 
   revalidatePath('/admin/classificacao')
   redirect('/admin/classificacao')
