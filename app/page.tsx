@@ -19,6 +19,7 @@ export default async function Home() {
     { data: proximoJogoData },
     { data: jogosRecentesData },
     { data: classificacaoData },
+    { data: planosData },
   ] = await Promise.all([
     supabase
       .from('socios')
@@ -40,12 +41,19 @@ export default async function Home() {
       .from('classificacao')
       .select('*')
       .order('pos', { ascending: true }),
+    supabase
+      .from('planos')
+      .select('*')
+      .order('tipo')
+      .order('ordem'),
   ])
 
   const proximoJogo = proximoJogoData?.[0] ?? null
   const jogosRecentes = jogosRecentesData ?? []
   const classificacao = classificacaoData ?? []
   const totalSocios = sociosCount ?? 0
+  const planosPF = planosData?.filter((p) => p.tipo === 'pf') ?? []
+  const planosPJ = planosData?.filter((p) => p.tipo === 'pj') ?? []
 
   return (
     <>
@@ -54,7 +62,7 @@ export default async function Home() {
         <Hero sociosCount={totalSocios} />
         <Beneficios />
         <Jogos proximoJogo={proximoJogo} jogosRecentes={jogosRecentes} classificacao={classificacao} />
-        <Planos />
+        <Planos planosPF={planosPF.length ? planosPF : undefined} planosPJ={planosPJ.length ? planosPJ : undefined} />
         <Loja />
         <Parceiros />
         <CtaFinal sociosCount={totalSocios} />

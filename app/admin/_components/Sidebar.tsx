@@ -13,6 +13,7 @@ import {
   UserCheck,
   Building2,
   ShieldCheck,
+  CreditCard,
 } from 'lucide-react'
 import { type Role, ROLE_WEIGHT } from '@/lib/types'
 
@@ -32,6 +33,7 @@ const menuItems: MenuItem[] = [
   { href: '/admin/transparencia', label: 'Transparência', icon: FileText, minRole: 'admin' },
   { href: '/admin/patrocinadores', label: 'Patrocinadores', icon: Handshake, minRole: 'admin' },
   { href: '/admin/socios', label: 'Sócios', icon: UserCheck, minRole: 'admin' },
+  { href: '/admin/planos', label: 'Planos', icon: CreditCard, minRole: 'admin' },
   { href: '/admin/clube', label: 'O Clube', icon: Building2, minRole: 'admin' },
   { href: '/admin/usuarios', label: 'Usuários', icon: ShieldCheck, minRole: 'super_admin' },
 ]

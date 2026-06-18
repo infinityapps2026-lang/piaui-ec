@@ -9,79 +9,48 @@ const CHECK = (
   </svg>
 )
 
-const PLANOS_PF = [
-  {
-    name: 'Iniciante',
-    price: '0',
-    period: '',
-    tagline: 'Comece a torcer com vantagens básicas, sem custo.',
-    features: ['20% de desconto em ingressos', 'Carteirinha digital', 'Newsletter exclusiva'],
-    cta: 'Começar grátis',
-    featured: false,
-  },
-  {
-    name: 'Vibrante+',
-    price: '29',
-    period: ',90 / mês',
-    tagline: 'O equilíbrio perfeito entre preço e benefícios para o torcedor de coração.',
-    features: ['Ingresso gratuito (arquibancada)', '20% off na loja oficial', 'Desconto em lojas parceiras', 'Prioridade em eventos', 'Carteirinha + brinde de boas-vindas'],
-    cta: 'Assinar agora',
-    featured: true,
-    badge: '★ Mais popular',
-  },
-  {
-    name: 'Vibrante Plus',
-    price: '49',
-    period: ',90 / mês',
-    tagline: 'Para quem quer estar perto do time e viver experiências exclusivas.',
-    features: ['Cadeira garantida em todos os jogos', '30% off na loja oficial', 'Visitas ao CT do clube', 'Encontros com jogadores', 'Camisa oficial de presente'],
-    cta: 'Quero esse plano',
-    featured: false,
-  },
+export type PlanoData = {
+  id: string
+  tipo: string
+  nome: string
+  preco: string
+  periodo: string
+  tagline: string
+  features: string[]
+  cta: string
+  link_botao: string
+  featured: boolean
+  badge: string | null
+  ordem: number
+}
+
+const FALLBACK_PF: PlanoData[] = [
+  { id: '1', tipo: 'pf', nome: 'Iniciante', preco: '0', periodo: '', tagline: 'Comece a torcer com vantagens básicas, sem custo.', features: ['20% de desconto em ingressos', 'Carteirinha digital', 'Newsletter exclusiva'], cta: 'Começar grátis', link_botao: '/seja-socio?plano=Iniciante', featured: false, badge: null, ordem: 1 },
+  { id: '2', tipo: 'pf', nome: 'Vibrante+', preco: '29', periodo: ',90 / mês', tagline: 'O equilíbrio perfeito entre preço e benefícios para o torcedor de coração.', features: ['Ingresso gratuito (arquibancada)', '20% off na loja oficial', 'Desconto em lojas parceiras', 'Prioridade em eventos', 'Carteirinha + brinde de boas-vindas'], cta: 'Assinar agora', link_botao: '/seja-socio?plano=Vibrante%2B', featured: true, badge: '★ Mais popular', ordem: 2 },
+  { id: '3', tipo: 'pf', nome: 'Vibrante Plus', preco: '49', periodo: ',90 / mês', tagline: 'Para quem quer estar perto do time e viver experiências exclusivas.', features: ['Cadeira garantida em todos os jogos', '30% off na loja oficial', 'Visitas ao CT do clube', 'Encontros com jogadores', 'Camisa oficial de presente'], cta: 'Quero esse plano', link_botao: '/seja-socio?plano=Vibrante%20Plus', featured: false, badge: null, ordem: 3 },
 ]
 
-const PLANOS_PJ = [
-  {
-    name: 'Bronze',
-    price: '299',
-    period: '/mês',
-    tagline: 'Visibilidade básica para pequenas empresas que apoiam o clube.',
-    features: ['Logo no site oficial', '4 ingressos por jogo', 'Certificado de patrocínio'],
-    cta: 'Fale conosco',
-    featured: false,
-  },
-  {
-    name: 'Ouro',
-    price: '799',
-    period: '/mês',
-    tagline: 'Exposição de marca nos jogos e canais digitais do clube.',
-    features: ['Logo no uniforme de treino', '10 ingressos por jogo', 'Camarote em jogos selecionados', 'Menção nas redes sociais'],
-    cta: 'Fale conosco',
-    featured: true,
-    badge: '★ Mais contratado',
-  },
-  {
-    name: 'Master',
-    price: '1.999',
-    period: '/mês',
-    tagline: 'Parceria estratégica com máxima visibilidade dentro e fora de campo.',
-    features: ['Naming rights em partidas', 'Logo no uniforme oficial', 'Camarote ilimitado', 'Ações de ativação exclusivas', 'Relatório mensal de mídia'],
-    cta: 'Fale conosco',
-    featured: false,
-  },
+const FALLBACK_PJ: PlanoData[] = [
+  { id: '4', tipo: 'pj', nome: 'Bronze', preco: '299', periodo: '/mês', tagline: 'Visibilidade básica para pequenas empresas que apoiam o clube.', features: ['Logo no site oficial', '4 ingressos por jogo', 'Certificado de patrocínio'], cta: 'Fale conosco', link_botao: '/seja-socio?plano=Bronze', featured: false, badge: null, ordem: 1 },
+  { id: '5', tipo: 'pj', nome: 'Ouro', preco: '799', periodo: '/mês', tagline: 'Exposição de marca nos jogos e canais digitais do clube.', features: ['Logo no uniforme de treino', '10 ingressos por jogo', 'Camarote em jogos selecionados', 'Menção nas redes sociais'], cta: 'Fale conosco', link_botao: '/seja-socio?plano=Ouro', featured: true, badge: '★ Mais contratado', ordem: 2 },
+  { id: '6', tipo: 'pj', nome: 'Master', preco: '1.999', periodo: '/mês', tagline: 'Parceria estratégica com máxima visibilidade dentro e fora de campo.', features: ['Naming rights em partidas', 'Logo no uniforme oficial', 'Camarote ilimitado', 'Ações de ativação exclusivas', 'Relatório mensal de mídia'], cta: 'Fale conosco', link_botao: '/seja-socio?plano=Master', featured: false, badge: null, ordem: 3 },
 ]
 
-export default function Planos() {
+export default function Planos({
+  planosPF = FALLBACK_PF,
+  planosPJ = FALLBACK_PJ,
+}: {
+  planosPF?: PlanoData[]
+  planosPJ?: PlanoData[]
+}) {
   const [aba, setAba] = useState<'pf' | 'pj'>('pf')
-  const planos = aba === 'pf' ? PLANOS_PF : PLANOS_PJ
+  const planos = aba === 'pf' ? planosPF : planosPJ
 
   return (
     <section
       id="planos"
       className="py-[140px] px-6 md:px-12 relative"
-      style={{
-        background: 'linear-gradient(180deg, #02060f 0%, #050f2c 100%)',
-      }}
+      style={{ background: 'linear-gradient(180deg, #02060f 0%, #050f2c 100%)' }}
     >
       {/* Grid texture */}
       <div
@@ -129,7 +98,7 @@ export default function Planos() {
       <div className="max-w-[1380px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 items-center">
         {planos.map((p) => (
           <div
-            key={p.name}
+            key={p.id}
             className={`relative p-[42px_32px] border transition-all duration-300 ${
               p.featured
                 ? 'border-pec-vermelho shadow-[0_30px_60px_-20px_rgba(227,6,19,.4)] scale-[1.04] hover:scale-[1.04] hover:-translate-y-1.5'
@@ -142,18 +111,18 @@ export default function Planos() {
               backdropFilter: 'blur(8px)',
             }}
           >
-            {'badge' in p && p.badge && (
+            {p.badge && (
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-pec-vermelho text-white px-4 py-1.5 text-[10px] tracking-[.2em] font-bold uppercase whitespace-nowrap">
                 {p.badge}
               </div>
             )}
             <div className={`font-archivo font-black text-[13px] tracking-[.2em] uppercase mb-6 ${p.featured ? 'text-pec-vermelho' : 'text-pec-cinza'}`}>
-              {p.name}
+              {p.nome}
             </div>
             <div className="flex items-baseline gap-2 mb-2">
               <span className="font-archivo text-xl font-semibold text-pec-cinza">R$</span>
-              <span className="font-bebas text-[88px] leading-[.9] text-white">{p.price}</span>
-              {p.period && <span className="text-[14px] text-pec-cinza">{p.period}</span>}
+              <span className="font-bebas text-[88px] leading-[.9] text-white">{p.preco}</span>
+              {p.periodo && <span className="text-[14px] text-pec-cinza">{p.periodo}</span>}
             </div>
             <p className="text-[13px] text-pec-cinza mb-8 pb-8 border-b border-white/[.08]">{p.tagline}</p>
             <ul className="space-y-0 mb-9">
@@ -165,7 +134,7 @@ export default function Planos() {
               ))}
             </ul>
             <Link
-              href={`/seja-socio?plano=${encodeURIComponent(p.name)}`}
+              href={p.link_botao}
               className={`w-full flex items-center justify-center gap-2 py-4 text-[11px] tracking-[.18em] uppercase font-bold no-underline transition-all ${
                 p.featured
                   ? 'bg-pec-vermelho text-white hover:bg-pec-vermelho-deep'
