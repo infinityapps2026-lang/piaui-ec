@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server'
+import { createPublicClient } from '@/lib/supabase-public'
 import SiteHeader from '@/app/_components/SiteHeader'
 import Hero from '@/app/_components/Hero'
 import Beneficios from '@/app/_components/Beneficios'
