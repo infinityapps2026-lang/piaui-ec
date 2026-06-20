@@ -9,7 +9,7 @@ type Patrocinador = {
 }
 
 export default async function Parceiros() {
-  const supabase = await createClient()
+ const supabase = createClient()
   const { data: parceiros } = await supabase
     .from('patrocinadores')
     .select('id, nome, logo_url, categoria, site_url')
