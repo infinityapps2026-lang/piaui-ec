@@ -12,7 +12,7 @@ import SiteFooter from '@/app/_components/SiteFooter'
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
- const supabase = await createClient()
+ const supabase = createPublicClient()
 
   const [
     { count: sociosCount },
