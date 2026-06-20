@@ -9,7 +9,7 @@ import Parceiros from '@/app/_components/Parceiros'
 import CtaFinal from '@/app/_components/CtaFinal'
 import SiteFooter from '@/app/_components/SiteFooter'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
  const supabase = await createClient()
