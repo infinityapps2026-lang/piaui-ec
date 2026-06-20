@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase-server'
 import SiteHeader from '@/app/_components/SiteHeader'
 import Hero from '@/app/_components/Hero'
 import Beneficios from '@/app/_components/Beneficios'
@@ -12,7 +12,7 @@ import SiteFooter from '@/app/_components/SiteFooter'
 export const revalidate = 60
 
 export default async function Home() {
- const supabase = createClient()
+ const supabase = await createClient()
 
   const [
     { count: sociosCount },
