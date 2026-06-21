@@ -7,8 +7,20 @@ import SiteFooter from '@/app/_components/SiteFooter'
 export const revalidate = 60
 
 export const metadata = {
-  title: 'Transparência — Piauí Esporte Clube',
-  description: 'Documentos financeiros e institucionais do Piauí Esporte Clube publicados de forma aberta.',
+  title: 'Transparência',
+  description: 'Documentos financeiros e institucionais do Piauí Esporte Clube publicados de forma aberta para sócios e torcedores.',
+  alternates: { canonical: '/transparencia' },
+  openGraph: {
+    type: 'website' as const,
+    url: '/transparencia',
+    title: 'Transparência — Piauí Esporte Clube',
+    description: 'Contratos, balancetes, atas e relatórios do Piauí EC publicados de forma aberta.',
+  },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Transparência — Piauí Esporte Clube',
+    description: 'Contratos, balancetes, atas e relatórios do Piauí EC publicados de forma aberta.',
+  },
 }
 
 const TIPO_LABELS: Record<string, string> = {

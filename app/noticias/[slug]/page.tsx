@@ -14,15 +14,34 @@ export async function generateMetadata(props: PageProps<'/noticias/[slug]'>) {
   const supabase = await createClient()
   const { data } = await supabase
     .from('noticias')
-    .select('titulo, resumo')
+    .select('titulo, resumo, autor, data_publicacao')
     .eq('slug', slug)
     .eq('publicado', true)
     .single()
 
   if (!data) return {}
+
+  const title = data.titulo
+  const description = data.resumo ?? `Leia ${data.titulo} no portal oficial do Piauí Esporte Clube.`
+  const url = `/noticias/${slug}`
+
   return {
-    title: `${data.titulo} — Piauí Esporte Clube`,
-    description: data.resumo ?? undefined,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'article',
+      url,
+      title,
+      description,
+      publishedTime: data.data_publicacao ?? undefined,
+      authors: data.autor ? [data.autor] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
   }
 }
 

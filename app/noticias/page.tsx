@@ -10,8 +10,20 @@ import { labelCategoria } from '@/app/_lib/categorias-noticias'
 export const revalidate = 60
 
 export const metadata = {
-  title: 'Notícias — Piauí Esporte Clube',
+  title: 'Notícias',
   description: 'Últimas notícias do Piauizão: jogos, contratações, bastidores e muito mais.',
+  alternates: { canonical: '/noticias' },
+  openGraph: {
+    type: 'website' as const,
+    url: '/noticias',
+    title: 'Notícias — Piauí Esporte Clube',
+    description: 'Últimas notícias do Piauizão: jogos, contratações, bastidores e muito mais.',
+  },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Notícias — Piauí Esporte Clube',
+    description: 'Últimas notícias do Piauizão: jogos, contratações, bastidores e muito mais.',
+  },
 }
 
 export default async function NoticiasPublicaPage() {

@@ -3,7 +3,8 @@ import SiteHeader from '@/app/_components/SiteHeader'
 import SiteFooter from '@/app/_components/SiteFooter'
 
 export const metadata = {
-  title: 'Cadastro Recebido — Piauí Esporte Clube',
+  title: 'Cadastro Recebido',
+  robots: { index: false, follow: false },
 }
 
 export default function ObrigadoPage() {

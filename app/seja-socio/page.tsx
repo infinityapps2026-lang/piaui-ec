@@ -3,8 +3,20 @@ import SiteFooter from '@/app/_components/SiteFooter'
 import SocioPublicoForm from './_components/SocioPublicoForm'
 
 export const metadata = {
-  title: 'Seja Sócio — Piauí Esporte Clube',
-  description: 'Associe-se ao Piauí Esporte Clube e faça parte da história do Piauizão.',
+  title: 'Seja Sócio',
+  description: 'Associe-se ao Piauí Esporte Clube e faça parte da história do Piauizão. Ingressos com desconto, carteirinha oficial e benefícios exclusivos.',
+  alternates: { canonical: '/seja-socio' },
+  openGraph: {
+    type: 'website' as const,
+    url: '/seja-socio',
+    title: 'Seja Sócio — Piauí Esporte Clube',
+    description: 'Associe-se ao Piauí EC e faça parte da história do Piauizão. Ingressos com desconto, carteirinha oficial e benefícios exclusivos.',
+  },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Seja Sócio — Piauí Esporte Clube',
+    description: 'Associe-se ao Piauí EC. Ingressos com desconto, carteirinha oficial e benefícios exclusivos.',
+  },
 }
 
 const BENEFICIOS = [
