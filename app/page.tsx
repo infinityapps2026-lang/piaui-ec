@@ -1,4 +1,4 @@
-import { createPublicClient } from '@/lib/supabase-public'
+import { createClient } from '@/lib/supabase-server'
 import SiteHeader from '@/app/_components/SiteHeader'
 import Hero from '@/app/_components/Hero'
 import Beneficios from '@/app/_components/Beneficios'
@@ -9,10 +9,10 @@ import Parceiros from '@/app/_components/Parceiros'
 import CtaFinal from '@/app/_components/CtaFinal'
 import SiteFooter from '@/app/_components/SiteFooter'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export default async function Home() {
- const supabase = createPublicClient()
+  const supabase = await createClient()
 
   const [
     { count: sociosCount },
