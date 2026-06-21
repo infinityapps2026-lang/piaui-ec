@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import SiteHeader from '@/app/_components/SiteHeader'
 import SiteFooter from '@/app/_components/SiteFooter'
+import NoticiasCarrossel from '@/app/_components/NoticiasCarrossel'
 
 export const revalidate = 60
 
@@ -21,6 +22,7 @@ export default async function NoticiasPublicaPage() {
     .order('data_publicacao', { ascending: false, nullsFirst: false })
 
   const lista = noticias ?? []
+  const destaques = lista.slice(0, 5)
 
   return (
     <>
@@ -54,69 +56,80 @@ export default async function NoticiasPublicaPage() {
           </div>
         </section>
 
+        {/* Carrossel de destaques */}
+        {destaques.length > 0 && (
+          <NoticiasCarrossel noticias={destaques} variant="page" />
+        )}
+
         {/* Grid de notícias */}
-        <section className="pb-[120px] px-6 md:px-12">
+        <section className="pb-[120px] pt-[80px] px-6 md:px-12">
           <div className="max-w-[1380px] mx-auto">
             {lista.length === 0 ? (
               <div className="text-center py-32">
                 <p className="text-pec-cinza text-lg">Nenhuma notícia publicada ainda.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {lista.map((n) => (
-                  <Link
-                    key={n.id}
-                    href={`/noticias/${n.slug}`}
-                    className="group block border border-white/[.08] overflow-hidden transition-all duration-300 hover:border-pec-vermelho/40 hover:-translate-y-1 no-underline"
-                    style={{ background: 'rgba(10,31,79,.3)' }}
-                  >
-                    {/* Imagem de capa */}
-                    <div className="aspect-video overflow-hidden bg-pec-azul-deep relative">
-                      {n.imagem_capa ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={n.imagem_capa}
-                          alt={n.titulo}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span className="font-bebas text-[60px] text-white/10">
-                            {n.categoria?.[0] ?? 'N'}
-                          </span>
-                        </div>
-                      )}
-                      {n.categoria && (
-                        <span className="absolute top-3 left-3 px-2.5 py-1 bg-pec-vermelho text-white text-[10px] tracking-[.2em] uppercase font-bold">
-                          {n.categoria}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Conteúdo do card */}
-                    <div className="p-6">
-                      <h2 className="font-archivo font-black text-[16px] text-white leading-snug mb-3 line-clamp-2 group-hover:text-pec-vermelho transition-colors duration-200">
-                        {n.titulo}
-                      </h2>
-                      {n.resumo && (
-                        <p className="text-pec-cinza text-[13px] leading-relaxed line-clamp-3 mb-4">
-                          {n.resumo}
-                        </p>
-                      )}
-                      <div className="flex items-center justify-between pt-4 border-t border-white/[.06]">
-                        <span className="text-pec-cinza text-[11px] tracking-[.1em]">
-                          {n.autor ?? 'Redação PEC'}
-                        </span>
-                        {n.data_publicacao && (
-                          <span className="text-pec-cinza text-[11px]">
-                            {format(new Date(n.data_publicacao), "dd 'de' MMM", { locale: ptBR })}
+              <>
+                <div className="mb-10 flex items-center gap-4">
+                  <span className="text-pec-vermelho text-[11px] tracking-[.3em] font-bold uppercase">
+                    Todas as notícias
+                  </span>
+                  <span className="flex-1 h-px bg-white/10" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {lista.map((n) => (
+                    <Link
+                      key={n.id}
+                      href={`/noticias/${n.slug}`}
+                      className="group block border border-white/[.08] overflow-hidden transition-all duration-300 hover:border-pec-vermelho/40 hover:-translate-y-1 no-underline"
+                      style={{ background: 'rgba(10,31,79,.3)' }}
+                    >
+                      <div className="aspect-video overflow-hidden bg-pec-azul-deep relative">
+                        {n.imagem_capa ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={n.imagem_capa}
+                            alt={n.titulo}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <span className="font-bebas text-[60px] text-white/10">
+                              {n.categoria?.[0] ?? 'N'}
+                            </span>
+                          </div>
+                        )}
+                        {n.categoria && (
+                          <span className="absolute top-3 left-3 px-2.5 py-1 bg-pec-vermelho text-white text-[10px] tracking-[.2em] uppercase font-bold">
+                            {n.categoria}
                           </span>
                         )}
                       </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+
+                      <div className="p-6">
+                        <h2 className="font-archivo font-black text-[16px] text-white leading-snug mb-3 line-clamp-2 group-hover:text-pec-vermelho transition-colors duration-200">
+                          {n.titulo}
+                        </h2>
+                        {n.resumo && (
+                          <p className="text-pec-cinza text-[13px] leading-relaxed line-clamp-3 mb-4">
+                            {n.resumo}
+                          </p>
+                        )}
+                        <div className="flex items-center justify-between pt-4 border-t border-white/[.06]">
+                          <span className="text-pec-cinza text-[11px] tracking-[.1em]">
+                            {n.autor ?? 'Redação PEC'}
+                          </span>
+                          {n.data_publicacao && (
+                            <span className="text-pec-cinza text-[11px]">
+                              {format(new Date(n.data_publicacao), "dd 'de' MMM", { locale: ptBR })}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </section>

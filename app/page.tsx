@@ -8,6 +8,7 @@ import Loja from '@/app/_components/Loja'
 import Parceiros from '@/app/_components/Parceiros'
 import CtaFinal from '@/app/_components/CtaFinal'
 import SiteFooter from '@/app/_components/SiteFooter'
+import NoticiasCarrossel from '@/app/_components/NoticiasCarrossel'
 
 export const revalidate = 60
 
@@ -20,6 +21,7 @@ export default async function Home() {
     { data: jogosRecentesData },
     { data: classificacaoData },
     { data: planosData },
+    { data: noticiasData },
   ] = await Promise.all([
     supabase
       .from('socios')
@@ -46,6 +48,12 @@ export default async function Home() {
       .select('*')
       .order('tipo')
       .order('ordem'),
+    supabase
+      .from('noticias')
+      .select('id, titulo, slug, resumo, categoria, imagem_capa, autor, data_publicacao')
+      .eq('publicado', true)
+      .order('data_publicacao', { ascending: false, nullsFirst: false })
+      .limit(5),
   ])
 
   const proximoJogo = proximoJogoData?.[0] ?? null
@@ -54,6 +62,7 @@ export default async function Home() {
   const totalSocios = sociosCount ?? 0
   const planosPF = planosData?.filter((p) => p.tipo === 'pf') ?? []
   const planosPJ = planosData?.filter((p) => p.tipo === 'pj') ?? []
+  const noticias = noticiasData ?? []
 
   return (
     <>
@@ -62,6 +71,7 @@ export default async function Home() {
         <Hero sociosCount={totalSocios} />
         <Beneficios />
         <Jogos proximoJogo={proximoJogo} jogosRecentes={jogosRecentes} classificacao={classificacao} />
+        {noticias.length > 0 && <NoticiasCarrossel noticias={noticias} />}
         <Planos planosPF={planosPF.length ? planosPF : undefined} planosPJ={planosPJ.length ? planosPJ : undefined} />
         <Loja />
         <Parceiros />

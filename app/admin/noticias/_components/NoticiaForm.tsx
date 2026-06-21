@@ -1,6 +1,7 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useRef, useState } from 'react'
+import { createBrowserClient } from '@supabase/ssr'
 import { criarNoticia, atualizarNoticia, type NoticiaFormState } from '../actions'
 
 type Noticia = {
@@ -26,6 +27,32 @@ export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
     boundAction,
     { error: null }
   )
+
+  const [imagemUrl, setImagemUrl] = useState<string | null>(noticia?.imagem_capa ?? null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  async function handleUpload(file: File) {
+    setUploadError(null)
+    setUploading(true)
+    try {
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      )
+      const ext = file.name.split('.').pop()
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+      const { error } = await supabase.storage.from('noticias').upload(path, file, { upsert: true })
+      if (error) throw new Error(error.message)
+      const { data: { publicUrl } } = supabase.storage.from('noticias').getPublicUrl(path)
+      setImagemUrl(publicUrl)
+    } catch (e) {
+      setUploadError(e instanceof Error ? e.message : 'Erro ao enviar imagem')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   return (
     <form action={formAction} className="space-y-6">
@@ -77,7 +104,7 @@ export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
           />
         </div>
 
-        <div>
+        <div className="md:col-span-2">
           <label className="block text-sm font-semibold text-slate-700 mb-1">
             Data de Publicação
           </label>
@@ -93,17 +120,70 @@ export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-1">
-            URL da Imagem de Capa
+        <div className="md:col-span-2">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
+            Imagem de Capa
           </label>
+          <input type="hidden" name="imagem_capa" value={imagemUrl ?? ''} />
+
+          {imagemUrl ? (
+            <div className="flex items-start gap-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={imagemUrl}
+                alt="Prévia da capa"
+                className="w-48 h-32 object-cover rounded-lg border border-slate-200 bg-slate-50"
+              />
+              <div className="flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="text-xs px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md font-semibold transition-colors"
+                >
+                  Trocar imagem
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setImagemUrl(null)}
+                  className="text-xs px-3 py-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors text-left"
+                >
+                  Remover
+                </button>
+              </div>
+            </div>
+          ) : (
+            <label
+              className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-[#0a1f4f] hover:bg-slate-50 transition-colors"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              {uploading ? (
+                <span className="text-sm text-slate-500">Enviando...</span>
+              ) : (
+                <>
+                  <svg className="w-8 h-8 text-slate-300 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+                  </svg>
+                  <span className="text-sm text-slate-500 font-semibold">Clique para enviar a imagem</span>
+                  <span className="text-xs text-slate-400 mt-1">PNG, JPG, WEBP (recomendado 1200×630)</span>
+                </>
+              )}
+            </label>
+          )}
+
           <input
-            name="imagem_capa"
-            type="url"
-            defaultValue={noticia?.imagem_capa ?? ''}
-            className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-            placeholder="https://..."
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (file) handleUpload(file)
+            }}
           />
+
+          {uploadError && (
+            <p className="mt-2 text-xs text-red-600">{uploadError}</p>
+          )}
         </div>
 
         <div className="md:col-span-2">
@@ -154,7 +234,7 @@ export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
       <div className="flex gap-3 pt-4 border-t border-slate-200">
         <button
           type="submit"
-          disabled={pending}
+          disabled={pending || uploading}
           className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] disabled:opacity-50 text-white text-sm font-bold rounded-lg transition-colors"
         >
           {pending ? 'Salvando...' : noticia ? 'Salvar Alterações' : 'Criar Notícia'}
