@@ -3,6 +3,7 @@
 import { useActionState, useRef, useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
 import { criarNoticia, atualizarNoticia, type NoticiaFormState } from '../actions'
+import { CATEGORIAS_NOTICIAS } from '@/app/_lib/categorias-noticias'
 
 type Noticia = {
   id: string
@@ -15,8 +16,6 @@ type Noticia = {
   publicado: boolean
   data_publicacao: string | null
 }
-
-const CATEGORIAS = ['Notícia', 'Jogo', 'Contratação', 'Institucional', 'Sócio']
 
 export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
   const boundAction = noticia
@@ -86,8 +85,8 @@ export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
             className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] bg-white"
           >
             <option value="">Selecione...</option>
-            {CATEGORIAS.map((c) => (
-              <option key={c} value={c}>{c}</option>
+            {CATEGORIAS_NOTICIAS.map((c) => (
+              <option key={c.value} value={c.value}>{c.label}</option>
             ))}
           </select>
         </div>

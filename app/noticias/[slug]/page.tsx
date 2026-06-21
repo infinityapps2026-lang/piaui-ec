@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import SiteHeader from '@/app/_components/SiteHeader'
 import SiteFooter from '@/app/_components/SiteFooter'
+import { labelCategoria } from '@/app/_lib/categorias-noticias'
 
 export const revalidate = 60
 
@@ -81,7 +82,7 @@ export default async function NoticiaPage(props: PageProps<'/noticias/[slug]'>) 
             {noticia.categoria && (
               <div className="mb-5">
                 <span className="inline-flex px-3 py-1 bg-pec-vermelho text-white text-[10px] tracking-[.25em] uppercase font-bold">
-                  {noticia.categoria}
+                  {labelCategoria(noticia.categoria)}
                 </span>
               </div>
             )}

@@ -5,6 +5,7 @@ import { Plus, Pencil } from 'lucide-react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import DeleteButton from './_components/DeleteButton'
+import { labelCategoria } from '@/app/_lib/categorias-noticias'
 
 export default async function NoticiasPage() {
   const supabase = await createClient()
@@ -59,7 +60,7 @@ export default async function NoticiasPage() {
                     <span className="font-medium text-slate-900 line-clamp-1">{n.titulo}</span>
                   </td>
                   <td className="px-4 py-4 hidden md:table-cell text-slate-600">
-                    {n.categoria ?? '—'}
+                    {labelCategoria(n.categoria) || '—'}
                   </td>
                   <td className="px-4 py-4 hidden lg:table-cell text-slate-600">
                     {n.autor ?? '—'}

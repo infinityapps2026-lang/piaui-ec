@@ -5,6 +5,7 @@ import { ptBR } from 'date-fns/locale'
 import SiteHeader from '@/app/_components/SiteHeader'
 import SiteFooter from '@/app/_components/SiteFooter'
 import NoticiasCarrossel from '@/app/_components/NoticiasCarrossel'
+import { labelCategoria } from '@/app/_lib/categorias-noticias'
 
 export const revalidate = 60
 
@@ -101,7 +102,7 @@ export default async function NoticiasPublicaPage() {
                         )}
                         {n.categoria && (
                           <span className="absolute top-3 left-3 px-2.5 py-1 bg-pec-vermelho text-white text-[10px] tracking-[.2em] uppercase font-bold">
-                            {n.categoria}
+                            {labelCategoria(n.categoria)}
                           </span>
                         )}
                       </div>

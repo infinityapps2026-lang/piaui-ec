@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { labelCategoria } from '@/app/_lib/categorias-noticias'
 
 export type NoticiaCard = {
   id: string
@@ -122,7 +123,7 @@ export default function NoticiasCarrossel({ noticias, intervalo = 6000, variant 
                 <div className="p-8 md:p-12 flex flex-col justify-center">
                   {n.categoria && (
                     <span className="self-start mb-4 px-2.5 py-1 bg-pec-vermelho text-white text-[10px] tracking-[.2em] uppercase font-bold">
-                      {n.categoria}
+                      {labelCategoria(n.categoria)}
                     </span>
                   )}
                   <h3 className="font-bebas text-[clamp(28px,3vw,44px)] leading-[1.05] uppercase text-white mb-4 group-hover:text-pec-vermelho transition-colors duration-200">
