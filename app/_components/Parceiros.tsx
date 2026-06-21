@@ -1,4 +1,4 @@
-import { createPublicClient } from '@/lib/supabase-public'
+import { createClient } from '@/lib/supabase-server'
 
 type Patrocinador = {
   id: string
@@ -9,7 +9,7 @@ type Patrocinador = {
 }
 
 export default async function Parceiros() {
-  const supabase = createPublicClient()
+  const supabase = await createClient()
   const { data: parceiros } = await supabase
     .from('patrocinadores')
     .select('id, nome, logo_url, categoria, site_url')
