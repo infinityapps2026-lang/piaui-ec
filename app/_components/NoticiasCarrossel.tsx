@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { labelCategoria } from '@/app/_lib/categorias-noticias'
@@ -92,7 +93,7 @@ export default function NoticiasCarrossel({ noticias, intervalo = 6000, variant 
             className="flex transition-transform duration-700 ease-out"
             style={{ transform: `translateX(-${index * 100}%)` }}
           >
-            {noticias.map((n) => (
+            {noticias.map((n, idx) => (
               <Link
                 key={n.id}
                 href={`/noticias/${n.slug}`}
@@ -101,11 +102,13 @@ export default function NoticiasCarrossel({ noticias, intervalo = 6000, variant 
               >
                 <div className="aspect-[16/10] md:aspect-auto md:min-h-[420px] relative overflow-hidden bg-pec-azul-deep">
                   {n.imagem_capa ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={n.imagem_capa}
                       alt={n.titulo}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority={idx === 0}
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">

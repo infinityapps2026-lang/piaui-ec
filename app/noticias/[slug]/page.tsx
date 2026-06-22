@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import Image from 'next/image'
 import SiteHeader from '@/app/_components/SiteHeader'
 import SiteFooter from '@/app/_components/SiteFooter'
 import { labelCategoria } from '@/app/_lib/categorias-noticias'
@@ -66,11 +67,13 @@ export default async function NoticiaPage(props: PageProps<'/noticias/[slug]'>) 
         {/* Hero com imagem de capa */}
         {noticia.imagem_capa ? (
           <div className="relative h-[420px] overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={noticia.imagem_capa}
               alt={noticia.titulo}
-              className="w-full h-full object-cover"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
               style={{ opacity: 0.45 }}
             />
             <div

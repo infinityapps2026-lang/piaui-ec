@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase-server'
 
 type Patrocinador = {
@@ -46,12 +47,15 @@ export default async function Parceiros() {
         >
           {lista.map((p) => {
             const content = p.logo_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={p.logo_url}
-                alt={p.nome}
-                className="max-h-10 max-w-full object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300 grayscale group-hover:grayscale-0"
-              />
+              <div className="relative w-full h-10">
+                <Image
+                  src={p.logo_url}
+                  alt={p.nome}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 230px"
+                  className="object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300 grayscale group-hover:grayscale-0"
+                />
+              </div>
             ) : (
               <span className="font-archivo font-black text-[13px] tracking-[.12em] uppercase text-pec-cinza group-hover:text-white transition-colors duration-300">
                 {p.nome}

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
@@ -45,8 +46,15 @@ function TeamShield({ url, nome, fallbackColor = '#334155' }: { url: string | nu
   const src = url ?? (nome === 'Piauí EC' ? PEC_LOGO : null)
   if (src) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img src={src} alt={`Escudo ${nome}`} className="w-full h-full object-contain" />
+      <div className="relative w-full h-full">
+        <Image
+          src={src}
+          alt={`Escudo ${nome}`}
+          fill
+          sizes="(max-width: 768px) 40px, 80px"
+          className="object-contain"
+        />
+      </div>
     )
   }
   const initials = nome.slice(0, 3).toUpperCase()
