@@ -1,9 +1,9 @@
 'use client'
 
 import { useActionState } from 'react'
-import { atualizarPlano, type PlanoFormState } from '../actions'
+import { atualizarPlano, criarPlano, type PlanoFormState } from '../actions'
 
-type Plano = {
+export type Plano = {
   id: string
   tipo: string
   nome: string
@@ -12,13 +12,15 @@ type Plano = {
   tagline: string
   features: string[]
   cta: string
-  link_botao: string
+  btn_url: string
   featured: boolean
   badge: string | null
+  ordem?: number | null
 }
 
-export default function PlanoForm({ plano }: { plano: Plano }) {
-  const boundAction = atualizarPlano.bind(null, plano.id)
+export default function PlanoForm({ plano }: { plano?: Plano }) {
+  const isNovo = !plano
+  const boundAction = isNovo ? criarPlano : atualizarPlano.bind(null, plano.id)
   const [state, formAction, pending] = useActionState<PlanoFormState, FormData>(
     boundAction,
     { error: null }
@@ -29,6 +31,57 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
       {state.error && (
         <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
           {state.error}
+        </div>
+      )}
+
+      {/* Identificação (só na criação) */}
+      {isNovo && (
+        <div className="border-b border-slate-100 pb-6">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Identificação</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <label className="block text-sm font-semibold text-slate-700 mb-1">
+                Nome do plano *
+              </label>
+              <input
+                name="nome"
+                required
+                defaultValue=""
+                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
+                placeholder="Ex: Sócio Bronze, Patrono PJ..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">
+                Tipo *
+              </label>
+              <select
+                name="tipo"
+                required
+                defaultValue=""
+                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] bg-white"
+              >
+                <option value="">Selecione...</option>
+                <option value="pf">Pessoa Física</option>
+                <option value="pj">Empresas (PJ)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">
+                Ordem <span className="text-slate-400 font-normal">(opcional)</span>
+              </label>
+              <input
+                name="ordem"
+                type="number"
+                defaultValue=""
+                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
+                placeholder="1, 2, 3..."
+              />
+              <p className="text-xs text-slate-400 mt-1">Define a posição do plano no grid do site.</p>
+            </div>
+          </div>
         </div>
       )}
 
@@ -45,7 +98,7 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
               <input
                 name="preco"
                 required
-                defaultValue={plano.preco}
+                defaultValue={plano?.preco ?? ''}
                 className="flex-1 border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent font-bold"
                 placeholder="0"
               />
@@ -59,11 +112,11 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
             </label>
             <input
               name="periodo"
-              defaultValue={plano.periodo}
+              defaultValue={plano?.periodo ?? ''}
               className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
               placeholder=",90 / mês"
             />
-            <p className="text-xs text-slate-400 mt-1">Aparece ao lado do preço. Ex: ",90 / mês" ou "/mês"</p>
+            <p className="text-xs text-slate-400 mt-1">Aparece ao lado do preço. Ex: &quot;,90 / mês&quot; ou &quot;/mês&quot;</p>
           </div>
         </div>
       </div>
@@ -79,7 +132,7 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
             <input
               name="cta"
               required
-              defaultValue={plano.cta}
+              defaultValue={plano?.cta ?? ''}
               className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
               placeholder="Assinar agora"
             />
@@ -90,9 +143,9 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
               Link do botão *
             </label>
             <input
-              name="link_botao"
+              name="btn_url"
               required
-              defaultValue={plano.link_botao}
+              defaultValue={plano?.btn_url ?? ''}
               className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent font-mono text-xs"
               placeholder="https://... ou /seja-socio?plano=..."
             />
@@ -109,7 +162,7 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
             <label className="block text-sm font-semibold text-slate-700 mb-1">Tagline</label>
             <input
               name="tagline"
-              defaultValue={plano.tagline}
+              defaultValue={plano?.tagline ?? ''}
               className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
               placeholder="Breve descrição do plano"
             />
@@ -122,7 +175,7 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
             <textarea
               name="features"
               rows={6}
-              defaultValue={plano.features.join('\n')}
+              defaultValue={plano?.features?.join('\n') ?? ''}
               className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent resize-y font-mono"
               placeholder={'Ingresso gratuito\n20% off na loja\nCarteirinha digital'}
             />
@@ -140,7 +193,7 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
             </label>
             <input
               name="badge"
-              defaultValue={plano.badge ?? ''}
+              defaultValue={plano?.badge ?? ''}
               className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
               placeholder="★ Mais popular"
             />
@@ -153,7 +206,7 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
                   name="featured"
                   type="checkbox"
                   value="true"
-                  defaultChecked={plano.featured}
+                  defaultChecked={plano?.featured ?? false}
                   className="sr-only peer"
                 />
                 <div className="w-10 h-6 bg-slate-300 peer-checked:bg-[#0a1f4f] rounded-full transition-colors" />
@@ -171,7 +224,7 @@ export default function PlanoForm({ plano }: { plano: Plano }) {
           disabled={pending}
           className="px-6 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] disabled:opacity-50 text-white text-sm font-bold rounded-lg transition-colors"
         >
-          {pending ? 'Salvando...' : 'Salvar Alterações'}
+          {pending ? 'Salvando...' : isNovo ? 'Criar Plano' : 'Salvar Alterações'}
         </button>
         <a
           href="/admin/planos"

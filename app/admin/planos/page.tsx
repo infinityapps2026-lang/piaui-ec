@@ -1,7 +1,7 @@
 import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
 import Link from 'next/link'
-import { Pencil } from 'lucide-react'
+import { Pencil, Plus } from 'lucide-react'
 
 export default async function PlanosAdminPage() {
   await requireRole(['super_admin', 'admin'])
@@ -18,11 +18,20 @@ export default async function PlanosAdminPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-black text-[#0a1f4f]">Planos de Associação</h1>
-        <p className="text-slate-500 text-sm mt-1">
-          Edite o valor, link e conteúdo de cada plano exibido no site.
-        </p>
+      <div className="mb-8 flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-black text-[#0a1f4f]">Planos de Associação</h1>
+          <p className="text-slate-500 text-sm mt-1">
+            Edite o valor, link e conteúdo de cada plano exibido no site.
+          </p>
+        </div>
+        <Link
+          href="/admin/planos/novo"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#0a1f4f] hover:bg-[#1a3a8f] text-white text-sm font-bold rounded-lg transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          Novo plano
+        </Link>
       </div>
 
       {(!planos || planos.length === 0) && (
@@ -56,7 +65,7 @@ export default async function PlanosAdminPage() {
   )
 }
 
-function PlanoCard({ plano }: { plano: { id: string; nome: string; preco: string; periodo: string; cta: string; link_botao: string; featured: boolean; badge: string | null } }) {
+function PlanoCard({ plano }: { plano: { id: string; nome: string; preco: string; periodo: string; cta: string; btn_url: string; featured: boolean; badge: string | null } }) {
   return (
     <div className={`bg-white rounded-xl border p-5 flex flex-col gap-3 ${plano.featured ? 'border-[#e30613]' : 'border-slate-200'}`}>
       <div className="flex items-start justify-between gap-2">
@@ -76,7 +85,7 @@ function PlanoCard({ plano }: { plano: { id: string; nome: string; preco: string
 
       <div className="text-xs text-slate-500 bg-slate-50 rounded-lg p-3 font-mono break-all">
         <span className="text-slate-400">Botão: </span>{plano.cta}<br />
-        <span className="text-slate-400">Link: </span>{plano.link_botao}
+        <span className="text-slate-400">Link: </span>{plano.btn_url}
       </div>
 
       <Link
