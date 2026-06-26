@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 const NAV = [
+  { href: '/clube',         label: 'O Clube' },
   { href: '/#jogos',        label: 'Jogos' },
   { href: '/#planos',       label: 'Seja Sócio' },
   { href: '/noticias',      label: 'Notícias' },

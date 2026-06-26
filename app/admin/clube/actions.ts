@@ -31,6 +31,8 @@ export async function criarInfo(prevState: ClubeFormState, formData: FormData): 
 
   const chave = (formData.get('chave') as string)
     .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
     .replace(/\s+/g, '_')
     .replace(/[^a-z0-9_]/g, '')
 
