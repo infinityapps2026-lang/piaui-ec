@@ -2,10 +2,13 @@
 
 import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
+import { CATEGORIAS_NOTICIAS } from '@/app/_lib/categorias-noticias'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export type NoticiaFormState = { error: string | null }
+
+const CATEGORIAS_VALIDAS: Set<string> = new Set(CATEGORIAS_NOTICIAS.map((c) => c.value))
 
 function slugify(text: string) {
   return text
@@ -16,33 +19,53 @@ function slugify(text: string) {
     .replace(/(^-|-$)/g, '')
 }
 
+type NoticiaPayload = {
+  titulo: string
+  slug: string
+  categoria: string
+  resumo: string
+  conteudo: string
+  imagem_capa: string | null
+  autor: string
+  publicado: boolean
+  data_publicacao: string | null
+}
+
+type ParseResult = { ok: true; payload: NoticiaPayload } | { ok: false; error: string }
+
+function parseForm(formData: FormData): ParseResult {
+  const titulo = ((formData.get('titulo') as string) ?? '').trim()
+  const categoria = ((formData.get('categoria') as string) ?? '').trim()
+
+  if (!titulo) return { ok: false, error: 'Informe o título da notícia.' }
+  if (!CATEGORIAS_VALIDAS.has(categoria)) {
+    return { ok: false, error: 'Selecione uma categoria válida.' }
+  }
+
+  return {
+    ok: true,
+    payload: {
+      titulo,
+      categoria,
+      slug: slugify(titulo),
+      resumo: ((formData.get('resumo') as string) ?? '').trim(),
+      conteudo: ((formData.get('conteudo') as string) ?? '').trim(),
+      imagem_capa: ((formData.get('imagem_capa') as string) ?? '').trim() || null,
+      autor: ((formData.get('autor') as string) ?? '').trim(),
+      publicado: formData.get('publicado') === 'true',
+      data_publicacao: ((formData.get('data_publicacao') as string) ?? '').trim() || null,
+    },
+  }
+}
+
 export async function criarNoticia(prevState: NoticiaFormState, formData: FormData): Promise<NoticiaFormState> {
   await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
 
-  const titulo = formData.get('titulo') as string
-  const resumo = formData.get('resumo') as string
-  const conteudo = formData.get('conteudo') as string
-  const categoria = formData.get('categoria') as string
-  const imagem_capa = formData.get('imagem_capa') as string
-  const autor = formData.get('autor') as string
-  const publicado = formData.get('publicado') === 'true'
-  const data_publicacao = formData.get('data_publicacao') as string
+  const parsed = parseForm(formData)
+  if (!parsed.ok) return { error: parsed.error }
 
-  const slug = slugify(titulo)
-
-  const { error } = await supabase.from('noticias').insert({
-    titulo,
-    slug,
-    resumo,
-    conteudo,
-    categoria,
-    imagem_capa: imagem_capa || null,
-    autor,
-    publicado,
-    data_publicacao: data_publicacao || null,
-  })
-
+  const { error } = await supabase.from('noticias').insert(parsed.payload)
   if (error) return { error: error.message }
 
   revalidatePath('/admin/noticias')
@@ -53,32 +76,10 @@ export async function atualizarNoticia(id: string, prevState: NoticiaFormState, 
   await requireRole(['super_admin', 'admin', 'editor'])
   const supabase = await createClient()
 
-  const titulo = formData.get('titulo') as string
-  const resumo = formData.get('resumo') as string
-  const conteudo = formData.get('conteudo') as string
-  const categoria = formData.get('categoria') as string
-  const imagem_capa = formData.get('imagem_capa') as string
-  const autor = formData.get('autor') as string
-  const publicado = formData.get('publicado') === 'true'
-  const data_publicacao = formData.get('data_publicacao') as string
+  const parsed = parseForm(formData)
+  if (!parsed.ok) return { error: parsed.error }
 
-  const slug = slugify(titulo)
-
-  const { error } = await supabase
-    .from('noticias')
-    .update({
-      titulo,
-      slug,
-      resumo,
-      conteudo,
-      categoria,
-      imagem_capa: imagem_capa || null,
-      autor,
-      publicado,
-      data_publicacao: data_publicacao || null,
-    })
-    .eq('id', id)
-
+  const { error } = await supabase.from('noticias').update(parsed.payload).eq('id', id)
   if (error) return { error: error.message }
 
   revalidatePath('/admin/noticias')

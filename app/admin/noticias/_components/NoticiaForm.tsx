@@ -77,14 +77,15 @@ export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
 
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1">
-            Categoria
+            Categoria *
           </label>
           <select
             name="categoria"
+            required
             defaultValue={noticia?.categoria ?? ''}
             className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] bg-white"
           >
-            <option value="">Selecione...</option>
+            <option value="" disabled>Selecione...</option>
             {CATEGORIAS_NOTICIAS.map((c) => (
               <option key={c.value} value={c.value}>{c.label}</option>
             ))}
