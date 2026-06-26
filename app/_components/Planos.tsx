@@ -43,8 +43,19 @@ export default function Planos({
   planosPF?: PlanoData[]
   planosPJ?: PlanoData[]
 }) {
-  const [aba, setAba] = useState<'pf' | 'pj'>('pf')
-  const planos = aba === 'pf' ? planosPF : planosPJ
+  const pfDisponivel = planosPF.length > 0
+  const pjDisponivel = planosPJ.length > 0
+
+  const abaInicial: 'pf' | 'pj' = pfDisponivel ? 'pf' : 'pj'
+  const [aba, setAba] = useState<'pf' | 'pj'>(abaInicial)
+
+  if (!pfDisponivel && !pjDisponivel) return null
+
+  const abaEfetiva: 'pf' | 'pj' =
+    (aba === 'pf' && !pfDisponivel) ? 'pj' :
+    (aba === 'pj' && !pjDisponivel) ? 'pf' : aba
+  const planos = abaEfetiva === 'pf' ? planosPF : planosPJ
+  const mostrarTabs = pfDisponivel && pjDisponivel
 
   return (
     <section
@@ -77,22 +88,24 @@ export default function Planos({
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="max-w-[1380px] mx-auto mb-16 flex justify-center border-b border-white/10 relative z-10">
-        {([['pf', 'Pessoa Física'], ['pj', 'Empresas']] as const).map(([key, label]) => (
-          <button
-            key={key}
-            onClick={() => setAba(key)}
-            className={`px-10 py-4.5 text-[12px] tracking-[.2em] uppercase font-bold border-b-2 transition-all bg-transparent cursor-pointer ${
-              aba === key
-                ? 'text-white border-pec-vermelho'
-                : 'text-pec-cinza border-transparent hover:text-white'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      {/* Tabs (só se ambas categorias estão disponíveis) */}
+      {mostrarTabs && (
+        <div className="max-w-[1380px] mx-auto mb-16 flex justify-center border-b border-white/10 relative z-10">
+          {([['pf', 'Pessoa Física'], ['pj', 'Empresas']] as const).map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setAba(key)}
+              className={`px-10 py-4.5 text-[12px] tracking-[.2em] uppercase font-bold border-b-2 transition-all bg-transparent cursor-pointer ${
+                abaEfetiva === key
+                  ? 'text-white border-pec-vermelho'
+                  : 'text-pec-cinza border-transparent hover:text-white'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Cards */}
       <div className="max-w-[1380px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 items-center">
@@ -147,14 +160,16 @@ export default function Planos({
         ))}
       </div>
 
-      <div className="max-w-[1380px] mx-auto text-center mt-12 relative z-10">
-        <button
-          onClick={() => setAba(aba === 'pf' ? 'pj' : 'pf')}
-          className="text-pec-cinza text-[13px] bg-transparent border-none cursor-pointer border-b border-white/20 pb-0.5 hover:text-pec-vermelho hover:border-pec-vermelho transition-colors tracking-[.05em]"
-        >
-          {aba === 'pf' ? 'Ver planos para empresas →' : 'Ver planos pessoa física →'}
-        </button>
-      </div>
+      {mostrarTabs && (
+        <div className="max-w-[1380px] mx-auto text-center mt-12 relative z-10">
+          <button
+            onClick={() => setAba(abaEfetiva === 'pf' ? 'pj' : 'pf')}
+            className="text-pec-cinza text-[13px] bg-transparent border-none cursor-pointer border-b border-white/20 pb-0.5 hover:text-pec-vermelho hover:border-pec-vermelho transition-colors tracking-[.05em]"
+          >
+            {abaEfetiva === 'pf' ? 'Ver planos para empresas →' : 'Ver planos pessoa física →'}
+          </button>
+        </div>
+      )}
     </section>
   )
 }

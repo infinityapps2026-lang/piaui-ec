@@ -2,16 +2,30 @@ import { requireRole } from '@/lib/auth'
 import { createClient } from '@/lib/supabase-server'
 import Link from 'next/link'
 import { Pencil, Plus } from 'lucide-react'
+import { atualizarConfigCategoria } from './actions'
+
+type ConfigRow = { tipo: string; ativo: boolean }
 
 export default async function PlanosAdminPage() {
   await requireRole(['super_admin', 'admin'])
   const supabase = await createClient()
 
-  const { data: planos } = await supabase
-    .from('planos')
-    .select('*')
-    .order('tipo')
-    .order('ordem')
+  const [{ data: planos }, { data: configData }] = await Promise.all([
+    supabase
+      .from('planos')
+      .select('*')
+      .order('tipo')
+      .order('ordem'),
+    supabase
+      .from('planos_config')
+      .select('tipo, ativo'),
+  ])
+
+  const config = new Map<string, boolean>(
+    (configData ?? []).map((c: ConfigRow) => [c.tipo, c.ativo]),
+  )
+  const pfAtivo = config.get('pf') ?? true
+  const pjAtivo = config.get('pj') ?? true
 
   const planosPF = planos?.filter((p) => p.tipo === 'pf') ?? []
   const planosPJ = planos?.filter((p) => p.tipo === 'pj') ?? []
@@ -22,7 +36,7 @@ export default async function PlanosAdminPage() {
         <div>
           <h1 className="text-2xl font-black text-[#0a1f4f]">Planos de Associação</h1>
           <p className="text-slate-500 text-sm mt-1">
-            Edite o valor, link e conteúdo de cada plano exibido no site.
+            Edite, ative/desative ou exclua planos. Use os toggles abaixo para esconder uma categoria inteira do site.
           </p>
         </div>
         <Link
@@ -34,15 +48,28 @@ export default async function PlanosAdminPage() {
         </Link>
       </div>
 
+      {/* Toggles de categoria */}
+      <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <CategoriaToggle tipo="pf" label="Pessoa Física" ativo={pfAtivo} qtd={planosPF.length} />
+        <CategoriaToggle tipo="pj" label="Empresas" ativo={pjAtivo} qtd={planosPJ.length} />
+      </div>
+
       {(!planos || planos.length === 0) && (
         <div className="p-6 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-sm">
-          <strong>Tabela &quot;planos&quot; não encontrada.</strong> Execute o SQL de criação no painel do Supabase para começar.
+          <strong>Tabela &quot;planos&quot; vazia ou não encontrada.</strong> Crie o primeiro plano usando o botão acima.
         </div>
       )}
 
       {planosPF.length > 0 && (
         <div className="mb-10">
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Pessoa Física</h2>
+          <div className="flex items-center gap-3 mb-4">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Pessoa Física</h2>
+            {!pfAtivo && (
+              <span className="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                Categoria desativada
+              </span>
+            )}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {planosPF.map((p) => (
               <PlanoCard key={p.id} plano={p} />
@@ -53,7 +80,14 @@ export default async function PlanosAdminPage() {
 
       {planosPJ.length > 0 && (
         <div>
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Empresas</h2>
+          <div className="flex items-center gap-3 mb-4">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Empresas</h2>
+            {!pjAtivo && (
+              <span className="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                Categoria desativada
+              </span>
+            )}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {planosPJ.map((p) => (
               <PlanoCard key={p.id} plano={p} />
@@ -65,9 +99,63 @@ export default async function PlanosAdminPage() {
   )
 }
 
-function PlanoCard({ plano }: { plano: { id: string; nome: string; preco: string; periodo: string; cta: string; btn_url: string; featured: boolean; badge: string | null } }) {
+function CategoriaToggle({ tipo, label, ativo, qtd }: { tipo: 'pf' | 'pj'; label: string; ativo: boolean; qtd: number }) {
   return (
-    <div className={`bg-white rounded-xl border p-5 flex flex-col gap-3 ${plano.featured ? 'border-[#e30613]' : 'border-slate-200'}`}>
+    <form
+      action={atualizarConfigCategoria}
+      className={`rounded-xl border p-4 flex items-center justify-between gap-4 transition-colors ${
+        ativo ? 'bg-white border-emerald-200' : 'bg-slate-50 border-slate-200'
+      }`}
+    >
+      <input type="hidden" name="tipo" value={tipo} />
+      <input type="hidden" name="ativo" value={ativo ? 'false' : 'true'} />
+      <div>
+        <p className="font-black text-[#0a1f4f] text-sm">{label}</p>
+        <p className="text-xs text-slate-500 mt-0.5">
+          {qtd} {qtd === 1 ? 'plano cadastrado' : 'planos cadastrados'} · {ativo ? 'Visível no site' : 'Oculta no site'}
+        </p>
+      </div>
+      <button
+        type="submit"
+        className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${
+          ativo
+            ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            : 'bg-emerald-500 text-white hover:bg-emerald-600'
+        }`}
+      >
+        {ativo ? 'Desativar' : 'Ativar'}
+      </button>
+    </form>
+  )
+}
+
+function PlanoCard({
+  plano,
+}: {
+  plano: {
+    id: string
+    nome: string
+    preco: string
+    periodo: string
+    cta: string
+    btn_url: string
+    featured: boolean
+    badge: string | null
+    ativo?: boolean | null
+  }
+}) {
+  const ativo = plano.ativo ?? true
+  return (
+    <div
+      className={`relative rounded-xl border p-5 flex flex-col gap-3 transition-opacity ${
+        plano.featured ? 'border-[#e30613]' : 'border-slate-200'
+      } ${ativo ? 'bg-white' : 'bg-slate-50 opacity-70'}`}
+    >
+      {!ativo && (
+        <span className="absolute top-3 right-3 text-[9px] bg-slate-300 text-slate-700 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+          Inativo
+        </span>
+      )}
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-black text-[#0a1f4f] text-sm">{plano.nome}</p>

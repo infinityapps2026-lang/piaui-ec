@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
-import { atualizarPlano, criarPlano, type PlanoFormState } from '../actions'
+import { atualizarPlano, criarPlano, deletarPlano, type PlanoFormState } from '../actions'
 
 export type Plano = {
   id: string
@@ -16,6 +16,7 @@ export type Plano = {
   featured: boolean
   badge: string | null
   ordem?: number | null
+  ativo?: boolean | null
 }
 
 export default function PlanoForm({ plano }: { plano?: Plano }) {
@@ -25,6 +26,7 @@ export default function PlanoForm({ plano }: { plano?: Plano }) {
     boundAction,
     { error: null }
   )
+  const ativoAtual = plano?.ativo ?? true
 
   return (
     <form action={formAction} className="space-y-6">
@@ -34,56 +36,58 @@ export default function PlanoForm({ plano }: { plano?: Plano }) {
         </div>
       )}
 
-      {/* Identificação (só na criação) */}
-      {isNovo && (
-        <div className="border-b border-slate-100 pb-6">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Identificação</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
-                Nome do plano *
-              </label>
-              <input
-                name="nome"
-                required
-                defaultValue=""
-                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-                placeholder="Ex: Sócio Bronze, Patrono PJ..."
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
-                Tipo *
-              </label>
-              <select
-                name="tipo"
-                required
-                defaultValue=""
-                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] bg-white"
-              >
-                <option value="">Selecione...</option>
-                <option value="pf">Pessoa Física</option>
-                <option value="pj">Empresas (PJ)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
-                Ordem <span className="text-slate-400 font-normal">(opcional)</span>
-              </label>
-              <input
-                name="ordem"
-                type="number"
-                defaultValue=""
-                className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
-                placeholder="1, 2, 3..."
-              />
-              <p className="text-xs text-slate-400 mt-1">Define a posição do plano no grid do site.</p>
-            </div>
+      {/* Identificação */}
+      <div className="border-b border-slate-100 pb-6">
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Identificação</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className={isNovo ? 'md:col-span-2' : 'md:col-span-3'}>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">
+              Nome do plano *
+            </label>
+            <input
+              name="nome"
+              required
+              defaultValue={plano?.nome ?? ''}
+              className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
+              placeholder="Ex: Sócio Bronze, Patrono PJ..."
+            />
           </div>
+
+          {isNovo && (
+            <>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                  Tipo *
+                </label>
+                <select
+                  name="tipo"
+                  required
+                  defaultValue=""
+                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] bg-white"
+                >
+                  <option value="">Selecione...</option>
+                  <option value="pf">Pessoa Física</option>
+                  <option value="pj">Empresas (PJ)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                  Ordem <span className="text-slate-400 font-normal">(opcional)</span>
+                </label>
+                <input
+                  name="ordem"
+                  type="number"
+                  defaultValue=""
+                  className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent"
+                  placeholder="1, 2, 3..."
+                />
+                <p className="text-xs text-slate-400 mt-1">Define a posição do plano no grid do site.</p>
+              </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Preço */}
       <div className="border-b border-slate-100 pb-6">
@@ -185,7 +189,7 @@ export default function PlanoForm({ plano }: { plano?: Plano }) {
 
       {/* Destaques */}
       <div className="pb-2">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Destaque visual</p>
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Destaque & Visibilidade</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1">
@@ -199,7 +203,7 @@ export default function PlanoForm({ plano }: { plano?: Plano }) {
             />
           </div>
 
-          <div className="flex items-end pb-1">
+          <div className="flex flex-col gap-3 justify-end pb-1">
             <label className="flex items-center gap-3 cursor-pointer select-none">
               <div className="relative">
                 <input
@@ -214,11 +218,26 @@ export default function PlanoForm({ plano }: { plano?: Plano }) {
               </div>
               <span className="text-sm font-semibold text-slate-700">Plano em destaque (borda vermelha)</span>
             </label>
+
+            <label className="flex items-center gap-3 cursor-pointer select-none">
+              <div className="relative">
+                <input
+                  name="ativo"
+                  type="checkbox"
+                  value="true"
+                  defaultChecked={ativoAtual}
+                  className="sr-only peer"
+                />
+                <div className="w-10 h-6 bg-slate-300 peer-checked:bg-emerald-500 rounded-full transition-colors" />
+                <div className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4" />
+              </div>
+              <span className="text-sm font-semibold text-slate-700">Plano ativo (visível no site)</span>
+            </label>
           </div>
         </div>
       </div>
 
-      <div className="flex gap-3 pt-4 border-t border-slate-200">
+      <div className="flex gap-3 pt-4 border-t border-slate-200 items-center flex-wrap">
         <button
           type="submit"
           disabled={pending}
@@ -232,6 +251,25 @@ export default function PlanoForm({ plano }: { plano?: Plano }) {
         >
           Cancelar
         </a>
+
+        {!isNovo && (
+          <>
+            <input type="hidden" name="id" value={plano.id} />
+            <button
+              type="submit"
+              formAction={deletarPlano}
+              formNoValidate
+              onClick={(e) => {
+                if (!confirm(`Excluir o plano "${plano.nome}"? Esta ação não pode ser desfeita.`)) {
+                  e.preventDefault()
+                }
+              }}
+              className="ml-auto px-5 py-2.5 bg-white border border-red-300 text-red-600 hover:bg-red-50 text-sm font-bold rounded-lg transition-colors"
+            >
+              Excluir plano
+            </button>
+          </>
+        )}
       </div>
     </form>
   )

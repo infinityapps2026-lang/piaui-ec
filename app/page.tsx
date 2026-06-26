@@ -21,6 +21,7 @@ export default async function Home() {
     { data: jogosRecentesData },
     { data: classificacaoData },
     { data: planosData },
+    { data: planosConfigData },
     { data: noticiasData },
   ] = await Promise.all([
     supabase
@@ -49,6 +50,9 @@ export default async function Home() {
       .order('tipo')
       .order('ordem'),
     supabase
+      .from('planos_config')
+      .select('tipo, ativo'),
+    supabase
       .from('noticias')
       .select('id, titulo, slug, resumo, categoria, imagem_capa, autor, data_publicacao')
       .eq('publicado', true)
@@ -60,8 +64,16 @@ export default async function Home() {
   const jogosRecentes = jogosRecentesData ?? []
   const classificacao = classificacaoData ?? []
   const totalSocios = sociosCount ?? 0
-  const planosPF = planosData?.filter((p) => p.tipo === 'pf') ?? []
-  const planosPJ = planosData?.filter((p) => p.tipo === 'pj') ?? []
+
+  const configMap = new Map<string, boolean>(
+    (planosConfigData ?? []).map((c: { tipo: string; ativo: boolean }) => [c.tipo, c.ativo]),
+  )
+  const pfAtivo = configMap.get('pf') ?? true
+  const pjAtivo = configMap.get('pj') ?? true
+
+  const planosAtivos = (planosData ?? []).filter((p) => (p.ativo ?? true) === true)
+  const planosPF = pfAtivo ? planosAtivos.filter((p) => p.tipo === 'pf') : []
+  const planosPJ = pjAtivo ? planosAtivos.filter((p) => p.tipo === 'pj') : []
   const noticias = noticiasData ?? []
 
   return (
@@ -72,7 +84,10 @@ export default async function Home() {
         <Beneficios />
         <Jogos proximoJogo={proximoJogo} jogosRecentes={jogosRecentes} classificacao={classificacao} />
         {noticias.length > 0 && <NoticiasCarrossel noticias={noticias} />}
-        <Planos planosPF={planosPF.length ? planosPF : undefined} planosPJ={planosPJ.length ? planosPJ : undefined} />
+        <Planos
+          planosPF={pfAtivo ? (planosPF.length ? planosPF : undefined) : []}
+          planosPJ={pjAtivo ? (planosPJ.length ? planosPJ : undefined) : []}
+        />
         <Loja />
         <Parceiros />
         <CtaFinal sociosCount={totalSocios} />
