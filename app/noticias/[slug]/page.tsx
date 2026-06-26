@@ -4,9 +4,32 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Image from 'next/image'
+import DOMPurify from 'isomorphic-dompurify'
 import SiteHeader from '@/app/_components/SiteHeader'
 import SiteFooter from '@/app/_components/SiteFooter'
 import { labelCategoria } from '@/app/_lib/categorias-noticias'
+
+function renderConteudo(raw: string): string {
+  const hasHtmlTags = /<\/?[a-z][\s\S]*?>/i.test(raw)
+  const html = hasHtmlTags
+    ? raw
+    : raw
+        .split(/\n{2,}/)
+        .map((p) => `<p>${p.replace(/\n/g, '<br />')}</p>`)
+        .join('')
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'strike',
+      'h2', 'h3', 'h4',
+      'ul', 'ol', 'li',
+      'blockquote',
+      'a', 'img',
+      'code', 'pre',
+      'hr',
+    ],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'src', 'alt', 'title', 'class'],
+  })
+}
 
 export const revalidate = 60
 
@@ -138,9 +161,10 @@ export default async function NoticiaPage(props: PageProps<'/noticias/[slug]'>) 
 
             {/* Corpo do artigo */}
             {noticia.conteudo && (
-              <div className="text-pec-cinza text-[15px] leading-[1.8] whitespace-pre-wrap">
-                {noticia.conteudo}
-              </div>
+              <div
+                className="noticia-conteudo text-pec-cinza text-[15px] leading-[1.8]"
+                dangerouslySetInnerHTML={{ __html: renderConteudo(noticia.conteudo) }}
+              />
             )}
 
           </div>

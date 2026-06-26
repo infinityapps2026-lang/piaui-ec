@@ -4,6 +4,7 @@ import { useActionState, useRef, useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
 import { criarNoticia, atualizarNoticia, type NoticiaFormState } from '../actions'
 import { CATEGORIAS_NOTICIAS } from '@/app/_lib/categorias-noticias'
+import RichEditor from './RichEditor'
 
 type Noticia = {
   id: string
@@ -203,14 +204,14 @@ export default function NoticiaForm({ noticia }: { noticia?: Noticia }) {
           <label className="block text-sm font-semibold text-slate-700 mb-1">
             Conteúdo *
           </label>
-          <textarea
+          <RichEditor
             name="conteudo"
-            rows={12}
-            required
             defaultValue={noticia?.conteudo ?? ''}
-            className="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a1f4f] focus:border-transparent resize-y font-mono"
             placeholder="Conteúdo completo da notícia..."
           />
+          <p className="mt-1.5 text-xs text-slate-500">
+            Use a barra de ferramentas para formatar texto, inserir imagens, links, títulos e listas.
+          </p>
         </div>
 
         <div className="md:col-span-2">

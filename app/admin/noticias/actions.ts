@@ -33,13 +33,25 @@ type NoticiaPayload = {
 
 type ParseResult = { ok: true; payload: NoticiaPayload } | { ok: false; error: string }
 
+function isHtmlEmpty(html: string): boolean {
+  return html
+    .replace(/<p>\s*<\/p>/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, '')
+    .trim().length === 0
+}
+
 function parseForm(formData: FormData): ParseResult {
   const titulo = ((formData.get('titulo') as string) ?? '').trim()
   const categoria = ((formData.get('categoria') as string) ?? '').trim()
+  const conteudo = ((formData.get('conteudo') as string) ?? '').trim()
 
   if (!titulo) return { ok: false, error: 'Informe o título da notícia.' }
   if (!CATEGORIAS_VALIDAS.has(categoria)) {
     return { ok: false, error: 'Selecione uma categoria válida.' }
+  }
+  if (isHtmlEmpty(conteudo)) {
+    return { ok: false, error: 'Informe o conteúdo da notícia.' }
   }
 
   return {
@@ -49,7 +61,7 @@ function parseForm(formData: FormData): ParseResult {
       categoria,
       slug: slugify(titulo),
       resumo: ((formData.get('resumo') as string) ?? '').trim(),
-      conteudo: ((formData.get('conteudo') as string) ?? '').trim(),
+      conteudo,
       imagem_capa: ((formData.get('imagem_capa') as string) ?? '').trim() || null,
       autor: ((formData.get('autor') as string) ?? '').trim(),
       publicado: formData.get('publicado') === 'true',
