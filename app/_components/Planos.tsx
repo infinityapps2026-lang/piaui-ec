@@ -56,6 +56,8 @@ export default function Planos({
     (aba === 'pj' && !pjDisponivel) ? 'pf' : aba
   const planos = abaEfetiva === 'pf' ? planosPF : planosPJ
   const mostrarTabs = pfDisponivel && pjDisponivel
+  const tituloNumero = numeroPorExtenso(planos.length)
+  const gridClass = colunasParaQtd(planos.length)
 
   return (
     <section
@@ -83,7 +85,7 @@ export default function Planos({
         <div>
           <div className="text-pec-vermelho text-[11px] tracking-[.3em] font-bold uppercase mb-3.5">Escolha o seu plano</div>
           <h2 className="font-bebas text-[clamp(48px,5vw,84px)] leading-[.95] uppercase text-white">
-            Três jeitos<br />de <span className="text-pec-vermelho">vibrar junto</span>
+            {tituloNumero} jeitos<br />de <span className="text-pec-vermelho">vibrar juntos</span>
           </h2>
         </div>
       </div>
@@ -108,7 +110,7 @@ export default function Planos({
       )}
 
       {/* Cards */}
-      <div className="max-w-[1380px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 items-center">
+      <div className={`mx-auto grid gap-6 relative z-10 items-center ${gridClass}`}>
         {planos.map((p) => (
           <div
             key={p.id}
@@ -172,4 +174,20 @@ export default function Planos({
       )}
     </section>
   )
+}
+
+function numeroPorExtenso(n: number): string {
+  const palavras = ['Zero', 'Um', 'Dois', 'Três', 'Quatro', 'Cinco', 'Seis', 'Sete', 'Oito', 'Nove', 'Dez']
+  return palavras[n] ?? String(n)
+}
+
+function colunasParaQtd(n: number): string {
+  switch (n) {
+    case 1: return 'grid-cols-1 max-w-[440px]'
+    case 2: return 'grid-cols-1 md:grid-cols-2 max-w-[900px]'
+    case 3: return 'grid-cols-1 md:grid-cols-3 max-w-[1380px]'
+    case 4: return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 max-w-[1380px]'
+    case 5: return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-5 max-w-[1500px]'
+    default: return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-[1380px]'
+  }
 }
